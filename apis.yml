@@ -1,0 +1,71 @@
+aid: shuffle
+name: Shuffle
+type: Index
+description: |-
+  Shuffle started as a project in mid-2019 because of a few automation related problems that needed more attention in the CERT/SIRT community. Available automation solutions in the security industry are trying to do everything at once; handle tickets, indicators, threat intel and much more in a single platform, while our goal is to build the best solution to fit all your existing tools following the Unix philosophy: "Do One Thing and Do It Well".
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+- Security
+- Worfklows
+created: '2024-09-27'
+modified: '2024-09-27'
+url: https://github.com/api-search/shuffle/apis.yml
+specificationVersion: '0.18'
+apis:
+- aid: shuffle:shuffle
+  name: Shuffle API
+  description: Shuffle started as a project in mid-2019 because of a few automation related problems that needed more attention in the CERT/SIRT community. Available automation solutions in the security industry are trying to do everything at once; handle tickets, indicators, threat intel and much more in a single platform, while our goal is to build the best solution to fit all your existing tools following the Unix philosophy: "Do One Thing and Do It Well".
+  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  humanURL: https://shuffler.io/docs/about
+  baseURL: http://api.example.com
+  tags:
+    - Security
+    - Worfklows
+  properties:
+  - type: Documentation
+    url: https://shuffler.io/docs/API
+  - type: OpenAPI
+    url: https://shuffler.io/apps/edaa73d40238ee60874a853dc3ccaa6f  
+common:
+- type: Signup
+  url: https://example.com/signup
+
+- type: Pricing
+  url: https://shuffler.io/pricing
+- type: UseCases
+  url: https://shuffler.io/usecases2
+- type: ProfessinoalServices
+  url: https://shuffler.io/professional-services
+- type: Training
+  url: https://shuffler.io/training
+- type: Partners
+  url: https://shuffler.io/partners
+- type: Signup
+  url: https://shuffler.io/register
+- type: Login
+  url: https://shuffler.io/login
+- type: About
+  url: https://shuffler.io/docs/about
+- type: Contact
+  url: https://shuffler.io/contact
+- type: Applications
+  url: https://shuffler.io/search?tab=apps
+- type: OpenSource
+  url: https://github.com/shuffle/shuffle
+- type: Compliance
+  url: https://shuffler.io/docs/compliance
+- type: Blog
+  url: https://medium.com/shuffle-automation
+- type: Privacy
+  url: https://shuffler.io/docs/privacy_policy
+- type: TermsOfService
+  url: https://shuffler.io/docs/terms_of_service
+- type: Discord
+  url: https://discord.com/invite/B2CBzUm
+- type: GitHubORg
+  url: https://github.com/Shuffle
+maintainers:
+- FN: Kin Lane
+  X-twitter: apievangelist
+  email: info@apievangelist.com
