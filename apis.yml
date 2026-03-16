@@ -64,7 +64,7 @@ common:
   - url: https://github.com/Shuffle
     type: GitHubOrganization
 created: '2024-09-27T00:00:00.000Z'
-modified: '2025-01-03'
+modified: '2026-03-16'
 description: >-
   Shuffle started as a project in mid-2019 because of a few automation related
   problems that needed more attention in the CERT/SIRT community. Available
@@ -74,7 +74,7 @@ description: >-
   existing tools following the Unix philosophy: "Do One Thing and Do It Well".
 maintainers:
   - FN: Kin Lane
-    email: info@apievangelist.com
+    email: kin@apievangelist.com
     X-twitter: apievangelist
 specificationVersion: '0.18'
 position: Consuming
