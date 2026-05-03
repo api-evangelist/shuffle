@@ -1,63 +1,48 @@
-# Shuffle (shuffle)
-Shuffle started as a project in mid-2019 because of a few automation related problems that needed more attention in the CERT/SIRT community. Available automation solutions in the security industry are trying to do everything at once; handle tickets, indicators, threat intel and much more in a single platform, while our goal is to build the best solution to fit all your existing tools following the Unix philosophy: "Do One Thing and Do It Well".
+# Shuffle
 
-**URL:** [Visit APIs.json URL](https://github.com/api-search/shuffle/apis.yml)
+Shuffle is an open source security automation platform (SOAR) built for and by security professionals. The platform enables security teams to orchestrate workflows across their entire security tool stack using a no-code/low-code interface powered by OpenAPI integrations. Shuffle provides workflow automation, app integration, webhook triggers, scheduled executions, file storage, and organization management via a comprehensive REST API. It follows the Unix philosophy of doing one thing well — connecting security tools through REST APIs.
 
-## Scope
-
-- **Type:** Index 
-
-## Tags:
-
- - Security, Worfklows
-
-## Timestamps
-
-- **Created:** 2024-09-27 
-- **Modified:** 2024-11-08 
+**Human URL:** [https://shuffler.io/docs/API](https://shuffler.io/docs/API)
 
 ## APIs
 
-### Shuffle API
-Shuffle started as a project in mid-2019 because of a few automation related problems that needed more attention in the CERT/SIRT community. Available automation solutions in the security industry are trying to do everything at once; handle tickets, indicators, threat intel and much more in a single platform, while our goal is to build the best solution to fit all your existing tools following the Unix philosophy Do One Thing and Do It Well.
+### Shuffle API v1
+- **Documentation:** https://shuffler.io/docs
+- **API Reference:** https://shuffler.io/docs/API
+- **Base URL (Cloud):** `https://shuffler.io/api/v1`
+- **Base URL (On-Premises):** `https://{domain}/api/v1`
+- **Authentication:** Bearer token — `Authorization: Bearer <APIKEY>` from profile settings
+- **Open Source:** https://github.com/Shuffle/Shuffle
+- **Community:** https://discord.com/invite/B2CBzUm
 
-**Human URL:** [https://shuffler.io/docs/about](https://shuffler.io/docs/about)
+## Artifacts
 
-**Base URL:** [http://api.example.com](http://api.example.com)
+### OpenAPI Specifications
+- [shuffle-openapi.yml](openapi/shuffle-openapi.yml)
 
+### JSON Schemas
+- [shuffle-workflow-schema.json](json-schema/shuffle-workflow-schema.json)
+- [shuffle-execution-schema.json](json-schema/shuffle-execution-schema.json)
 
-#### Tags:
+### JSON Structure
+- [shuffle-workflow-structure.json](json-structure/shuffle-workflow-structure.json)
 
- - Security, Worfklows
+### JSON-LD Context
+- [shuffle-context.jsonld](json-ld/shuffle-context.jsonld)
 
-#### Properties
+### Examples
+- [shuffle-execute-workflow-example.json](examples/shuffle-execute-workflow-example.json) — Trigger a security automation workflow
+- [shuffle-create-workflow-example.json](examples/shuffle-create-workflow-example.json) — Create a new workflow
 
-- [Documentation](https://shuffler.io/docs/API)
-- [OpenAPI](https://shuffler.io/apps/edaa73d40238ee60874a853dc3ccaa6f)
+### Rules
+- [shuffle-rules.yml](rules/shuffle-rules.yml)
 
-## Common Properties
+### Capabilities
+- [security-workflow-automation.yaml](capabilities/security-workflow-automation.yaml) — Workflows, executions, apps, webhooks, files, notifications, and user management for security automation
 
-- [Sign-Up](https://example.com/signup)
-- [Pricing](https://shuffler.io/pricing)
-- [UseCases](https://shuffler.io/usecases2)
-- [ProfessinoalServices](https://shuffler.io/professional-services)
-- [Training](https://shuffler.io/training)
-- [Partners](https://shuffler.io/partners)
-- [Login](https://shuffler.io/login)
-- [About](https://shuffler.io/docs/about)
-- [Contact](https://shuffler.io/contact)
-- [Applications](https://shuffler.io/search?tab=apps)
-- [OpenSource](https://github.com/shuffle/shuffle)
-- [Compliance](https://shuffler.io/docs/compliance)
-- [Blog](https://medium.com/shuffle-automation)
-- [PrivacyPolicy](https://shuffler.io/docs/privacy_policy)
-- [TermsOfService](https://shuffler.io/docs/terms_of_service)
-- [Discord](https://discord.com/invite/B2CBzUm)
-- [GitHubOrganization](https://github.com/Shuffle)
+### Vocabulary
+- [shuffle-vocabulary.yml](vocabulary/shuffle-vocabulary.yml)
 
 ## Maintainers
 
-**FN:** Kin Lane
-
-**Email:** info@apievangelist.com
-
+**Kin Lane** - kin@apievangelist.com

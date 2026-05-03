@@ -1,0 +1,98 @@
+{
+  "title": "Shuffle Workflow Structure",
+  "description": "JSON structure documentation for Shuffle security automation workflow objects",
+  "version": "v1",
+  "source": "https://shuffler.io/api/v1",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string",
+      "required": true,
+      "description": "UUID identifying the workflow"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Human-readable workflow name"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "Workflow purpose and operational description"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "enum": ["published", "draft"],
+      "description": "Publication status of the workflow"
+    },
+    {
+      "name": "org_id",
+      "type": "string",
+      "description": "Owning organization ID"
+    },
+    {
+      "name": "created",
+      "type": "integer",
+      "description": "Unix millisecond timestamp of workflow creation"
+    },
+    {
+      "name": "edited",
+      "type": "integer",
+      "description": "Unix millisecond timestamp of last modification"
+    },
+    {
+      "name": "actions",
+      "type": "array",
+      "description": "Ordered list of action nodes to execute",
+      "fields": [
+        { "name": "id", "type": "string", "description": "Action node UUID" },
+        { "name": "name", "type": "string", "description": "Action function name" },
+        { "name": "label", "type": "string", "description": "Display label in workflow editor" },
+        { "name": "app_name", "type": "string", "description": "App providing this action" },
+        { "name": "app_version", "type": "string", "description": "App version" },
+        { "name": "app_id", "type": "string", "description": "App identifier" },
+        { "name": "authentication", "type": "string", "description": "Authentication config ID" },
+        { "name": "parameters", "type": "array", "description": "Input parameters for this action" },
+        { "name": "is_valid", "type": "boolean", "description": "Whether action configuration is valid" }
+      ]
+    },
+    {
+      "name": "triggers",
+      "type": "array",
+      "description": "Trigger nodes that initiate workflow execution",
+      "fields": [
+        { "name": "id", "type": "string" },
+        { "name": "name", "type": "string" },
+        { "name": "type", "type": "string", "enum": ["webhook", "schedule", "manual", "email"] },
+        { "name": "parameters", "type": "array" }
+      ]
+    },
+    {
+      "name": "tags",
+      "type": "array",
+      "items": "string",
+      "description": "Classification tags for the workflow"
+    },
+    {
+      "name": "variables",
+      "type": "array",
+      "description": "Workflow-level variables shared across actions"
+    }
+  ],
+  "execution": {
+    "description": "Execution object returned when a workflow runs",
+    "fields": [
+      { "name": "execution_id", "type": "string", "description": "UUID of the execution instance" },
+      { "name": "workflow_id", "type": "string" },
+      { "name": "status", "type": "string", "enum": ["EXECUTING", "FINISHED", "ABORTED", "FAILED"] },
+      { "name": "started_at", "type": "integer", "description": "Start timestamp in Unix ms" },
+      { "name": "completed_at", "type": "integer", "description": "Completion timestamp in Unix ms" },
+      { "name": "execution_argument", "type": "string", "description": "Input data for this run" },
+      { "name": "authorization", "type": "string", "description": "Token for status polling" },
+      { "name": "result", "type": "string", "description": "Final output from last action" },
+      { "name": "results", "type": "array", "description": "Per-action result objects" }
+    ]
+  }
+}

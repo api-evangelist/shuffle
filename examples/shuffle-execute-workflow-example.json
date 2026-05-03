@@ -1,0 +1,27 @@
+{
+  "title": "Execute Workflow Example",
+  "description": "Example request and response for triggering a Shuffle security automation workflow",
+  "request": {
+    "method": "POST",
+    "url": "https://shuffler.io/api/v1/workflows/wf-abc123-def456/execute",
+    "headers": {
+      "Authorization": "Bearer YOUR_API_KEY_HERE",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "execution_argument": "{\"alert_id\": \"INC-20240501-0042\", \"severity\": \"high\", \"source_ip\": \"192.168.1.100\", \"alert_type\": \"malware_detected\"}",
+      "start": "action_node_001"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "success": true,
+      "execution_id": "exec-xyz789-uvw012",
+      "authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+  }
+}

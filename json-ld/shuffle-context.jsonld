@@ -1,0 +1,96 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "shuffle": "https://shuffler.io/vocab#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "Workflow": "shuffle:Workflow",
+    "Execution": "shuffle:Execution",
+    "Action": "shuffle:Action",
+    "Trigger": "shuffle:Trigger",
+    "App": "shuffle:App",
+    "Organization": "schema:Organization",
+    "User": "schema:Person",
+
+    "id": "@id",
+    "name": "schema:name",
+    "description": "schema:description",
+    "email": "schema:email",
+    "url": "schema:url",
+
+    "status": {
+      "@id": "shuffle:status",
+      "@type": "@vocab"
+    },
+    "org_id": {
+      "@id": "shuffle:organizationId",
+      "@type": "xsd:string"
+    },
+    "workflow_id": {
+      "@id": "shuffle:workflowId",
+      "@type": "xsd:string"
+    },
+    "execution_id": {
+      "@id": "shuffle:executionId",
+      "@type": "xsd:string"
+    },
+    "created": {
+      "@id": "shuffle:created",
+      "@type": "xsd:long"
+    },
+    "edited": {
+      "@id": "shuffle:edited",
+      "@type": "xsd:long"
+    },
+    "started_at": {
+      "@id": "shuffle:startedAt",
+      "@type": "xsd:long"
+    },
+    "completed_at": {
+      "@id": "shuffle:completedAt",
+      "@type": "xsd:long"
+    },
+    "actions": {
+      "@id": "shuffle:actions",
+      "@container": "@list"
+    },
+    "triggers": {
+      "@id": "shuffle:triggers",
+      "@container": "@list"
+    },
+    "tags": {
+      "@id": "shuffle:tags",
+      "@container": "@set"
+    },
+    "app_name": {
+      "@id": "shuffle:appName",
+      "@type": "xsd:string"
+    },
+    "app_version": {
+      "@id": "shuffle:appVersion",
+      "@type": "xsd:string"
+    },
+    "execution_argument": {
+      "@id": "shuffle:executionArgument",
+      "@type": "xsd:string"
+    },
+    "result": {
+      "@id": "shuffle:result",
+      "@type": "xsd:string"
+    },
+    "results": {
+      "@id": "shuffle:results",
+      "@container": "@list"
+    },
+    "authorization": {
+      "@id": "shuffle:authorization",
+      "@type": "xsd:string"
+    },
+    "role": {
+      "@id": "shuffle:role",
+      "@type": "@vocab"
+    },
+    "username": "schema:name"
+  }
+}

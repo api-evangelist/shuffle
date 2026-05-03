@@ -1,0 +1,365 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Shuffle API"
+  description: >-
+    Open source security automation platform (SOAR) REST API providing workflow
+    management, app integration, execution control, user management, file storage,
+    and datastore operations for security orchestration.
+  tags:
+    - Security
+    - Workflows
+    - Automation
+    - SOAR
+    - Orchestration
+    - Open Source
+  created: "2026-05-02"
+  modified: "2026-05-02"
+
+binds:
+  - namespace: env
+    keys:
+      SHUFFLE_API_KEY: SHUFFLE_API_KEY
+
+capability:
+  consumes:
+    - type: http
+      namespace: shuffle
+      baseUri: https://shuffler.io/api/v1
+      description: "Shuffle security automation platform REST API"
+      authentication:
+        type: bearer
+        token: "{{SHUFFLE_API_KEY}}"
+      resources:
+        - name: workflows
+          path: /workflows
+          description: Security automation workflow management
+          operations:
+            - name: list-workflows
+              method: GET
+              description: List all workflows in the organization
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: array
+                  value: "$."
+            - name: create-workflow
+              method: POST
+              description: Create a new automation workflow
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  name: "{{tools.name}}"
+                  description: "{{tools.description}}"
+            - name: get-workflow
+              method: GET
+              description: Get workflow details by ID
+              inputParameters:
+                - name: id
+                  in: path
+                  type: string
+                  required: true
+                  description: Workflow ID
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: delete-workflow
+              method: DELETE
+              description: Delete a workflow by ID
+              inputParameters:
+                - name: id
+                  in: path
+                  type: string
+                  required: true
+                  description: Workflow ID
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: execute-workflow
+              method: POST
+              description: Trigger a workflow execution
+              inputParameters:
+                - name: id
+                  in: path
+                  type: string
+                  required: true
+                  description: Workflow ID
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  execution_argument: "{{tools.execution_argument}}"
+            - name: get-workflow-executions
+              method: GET
+              description: Get execution history for a workflow
+              inputParameters:
+                - name: id
+                  in: path
+                  type: string
+                  required: true
+                  description: Workflow ID
+                - name: top
+                  in: query
+                  type: integer
+                  required: false
+                  description: Number of executions to return
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: array
+                  value: "$."
+            - name: abort-execution
+              method: GET
+              description: Abort a running workflow execution
+              inputParameters:
+                - name: id
+                  in: path
+                  type: string
+                  required: true
+                  description: Workflow ID
+                - name: exec_id
+                  in: path
+                  type: string
+                  required: true
+                  description: Execution ID to abort
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: schedule-workflow
+              method: POST
+              description: Create a scheduled trigger for a workflow
+              inputParameters:
+                - name: id
+                  in: path
+                  type: string
+                  required: true
+                  description: Workflow ID
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  frequency: "{{tools.frequency}}"
+                  execution_argument: "{{tools.execution_argument}}"
+
+        - name: apps
+          path: /apps
+          description: Security tool app integrations
+          operations:
+            - name: list-apps
+              method: GET
+              description: List all available apps for the organization
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: array
+                  value: "$."
+            - name: search-apps
+              method: POST
+              description: Search the global app library
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: array
+                  value: "$."
+              body:
+                type: json
+                data:
+                  search: "{{tools.search}}"
+            - name: list-app-authentications
+              method: GET
+              description: List all app authentication configurations
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: array
+                  value: "$."
+
+        - name: triggers
+          path: /hooks
+          description: Webhook triggers for workflow initiation
+          operations:
+            - name: create-webhook
+              method: POST
+              description: Create a webhook trigger for a workflow
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  name: "{{tools.name}}"
+                  type: "webhook"
+                  workflow: "{{tools.workflow_id}}"
+            - name: delete-webhook
+              method: DELETE
+              description: Remove a webhook trigger
+              inputParameters:
+                - name: id
+                  in: path
+                  type: string
+                  required: true
+                  description: Webhook ID
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: files
+          path: /files
+          description: File storage for workflow data
+          operations:
+            - name: list-files
+              method: GET
+              description: List all files in the organization
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: array
+                  value: "$."
+            - name: create-file
+              method: POST
+              description: Create a file record
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  filename: "{{tools.filename}}"
+                  org_id: "{{tools.org_id}}"
+
+        - name: notifications
+          path: /notifications
+          description: Organization notification management
+          operations:
+            - name: list-notifications
+              method: GET
+              description: List notifications for the organization
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: array
+                  value: "$."
+            - name: create-notification
+              method: POST
+              description: Create a notification
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  title: "{{tools.title}}"
+                  description: "{{tools.description}}"
+
+        - name: users
+          path: /users
+          description: User management
+          operations:
+            - name: list-users
+              method: GET
+              description: List all users in the organization
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: array
+                  value: "$."
+
+        - name: organizations
+          path: /orgs
+          description: Organization management
+          operations:
+            - name: list-organizations
+              method: GET
+              description: List all organizations
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: array
+                  value: "$."
+            - name: get-org-stats
+              method: GET
+              description: Get usage statistics for an organization
+              inputParameters:
+                - name: org_id
+                  in: path
+                  type: string
+                  required: true
+                  description: Organization ID
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8100
+      namespace: shuffle-rest
+      resources:
+        - path: /v1/workflows
+          name: workflows
+          description: Workflow management
+          operations:
+            - method: GET
+              name: list-workflows
+              description: List workflows
+              call: "shuffle.list-workflows"
+              outputParameters:
+                - type: array
+                  mapping: "$."
+        - path: /v1/workflows/{id}/execute
+          name: execute-workflow
+          description: Execute a workflow
+          operations:
+            - method: POST
+              name: execute-workflow
+              description: Trigger workflow execution
+              call: "shuffle.execute-workflow"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9100
+      namespace: shuffle-mcp
+      transport: http
+      tools:
+        - name: list-workflows
+          description: List all security automation workflows
+          call: "shuffle.list-workflows"
+          outputParameters:
+            - type: array
+              mapping: "$."
+        - name: execute-workflow
+          description: Trigger a workflow execution
+          call: "shuffle.execute-workflow"
+          outputParameters:
+            - type: object
+              mapping: "$."

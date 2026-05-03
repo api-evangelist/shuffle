@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shuffler.io/schemas/workflow",
+  "title": "Shuffle Workflow",
+  "description": "A security automation workflow in the Shuffle SOAR platform. Workflows connect apps, triggers, and variables to automate security operations across the tool stack.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique workflow identifier (UUID)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable workflow name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the workflow's purpose and operation"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["published", "draft"],
+      "description": "Workflow publication status"
+    },
+    "org_id": {
+      "type": "string",
+      "description": "Organization this workflow belongs to"
+    },
+    "created": {
+      "type": "integer",
+      "description": "Creation timestamp in Unix milliseconds"
+    },
+    "edited": {
+      "type": "integer",
+      "description": "Last modification timestamp in Unix milliseconds"
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Action"
+      },
+      "description": "Array of action nodes in the workflow graph"
+    },
+    "triggers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Trigger"
+      },
+      "description": "Array of trigger nodes that start the workflow"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Classification tags for the workflow"
+    },
+    "execution_org": {
+      "type": "object",
+      "description": "Organization context for execution environment"
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Variable"
+      },
+      "description": "Workflow-level variables"
+    }
+  },
+  "required": ["id", "name"],
+  "$defs": {
+    "Action": {
+      "type": "object",
+      "description": "An action node in the workflow (app action to execute)",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "label": { "type": "string" },
+        "app_name": { "type": "string" },
+        "app_version": { "type": "string" },
+        "app_id": { "type": "string" },
+        "action": { "type": "object" },
+        "position": {
+          "type": "object",
+          "properties": {
+            "x": { "type": "number" },
+            "y": { "type": "number" }
+          }
+        },
+        "authentication": { "type": "string" },
+        "parameters": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "errors": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "is_valid": { "type": "boolean" },
+        "node_type": { "type": "string" }
+      }
+    },
+    "Trigger": {
+      "type": "object",
+      "description": "A trigger that initiates workflow execution",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "label": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["webhook", "schedule", "manual", "email"]
+        },
+        "parameters": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "position": {
+          "type": "object",
+          "properties": {
+            "x": { "type": "number" },
+            "y": { "type": "number" }
+          }
+        }
+      }
+    },
+    "Variable": {
+      "type": "object",
+      "description": "A workflow-level variable",
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}

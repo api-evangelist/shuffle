@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shuffler.io/schemas/execution",
+  "title": "Shuffle Workflow Execution",
+  "description": "A workflow execution instance in the Shuffle SOAR platform representing a single run of a workflow.",
+  "type": "object",
+  "properties": {
+    "execution_id": {
+      "type": "string",
+      "description": "Unique execution identifier (UUID)"
+    },
+    "workflow_id": {
+      "type": "string",
+      "description": "ID of the workflow that was executed"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["EXECUTING", "FINISHED", "ABORTED", "FAILED"],
+      "description": "Current status of the execution"
+    },
+    "started_at": {
+      "type": "integer",
+      "description": "Execution start timestamp in Unix milliseconds"
+    },
+    "completed_at": {
+      "type": "integer",
+      "description": "Execution completion timestamp in Unix milliseconds"
+    },
+    "execution_argument": {
+      "type": "string",
+      "description": "Input data passed to the workflow at execution start"
+    },
+    "authorization": {
+      "type": "string",
+      "description": "Authorization token for polling execution status"
+    },
+    "result": {
+      "type": "string",
+      "description": "Final output from the last workflow action"
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ActionResult"
+      },
+      "description": "Results from each action in the workflow"
+    }
+  },
+  "required": ["execution_id", "workflow_id", "status"],
+  "$defs": {
+    "ActionResult": {
+      "type": "object",
+      "description": "Result from an individual action in the workflow execution",
+      "properties": {
+        "action": {
+          "type": "object",
+          "description": "The action that produced this result"
+        },
+        "result": {
+          "type": "string",
+          "description": "Output from this action"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["SUCCESS", "FAILURE", "SKIPPED"]
+        },
+        "started_at": {
+          "type": "integer"
+        },
+        "completed_at": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

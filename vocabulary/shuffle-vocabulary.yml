@@ -1,0 +1,189 @@
+title: Shuffle Vocabulary
+description: >-
+  Domain vocabulary for the Shuffle open source security automation platform (SOAR).
+  Covers workflow automation concepts, app integration patterns, security orchestration
+  terminology, and the Shuffle API's operational model.
+version: '1.0'
+source: https://shuffler.io/api/v1
+created: '2026-05-02'
+modified: '2026-05-02'
+
+terms:
+  - term: SOAR
+    definition: >-
+      Security Orchestration, Automation and Response. A category of security
+      platform that combines workflow automation, threat intelligence aggregation,
+      and incident response capabilities. Shuffle is an open source SOAR implementation.
+    tags:
+      - Core
+      - Security
+
+  - term: Workflow
+    definition: >-
+      An automation sequence in Shuffle consisting of triggers, actions, and
+      conditions that orchestrate security operations across connected tools.
+      Workflows are the primary unit of automation in the platform.
+    tags:
+      - Core
+
+  - term: Action
+    definition: >-
+      A node in a workflow that executes a specific function from an integrated
+      app. Actions receive inputs from previous nodes and produce outputs that
+      can be used by subsequent nodes.
+    tags:
+      - Core
+      - Workflows
+
+  - term: Trigger
+    definition: >-
+      A node that initiates workflow execution. Trigger types include webhooks
+      (HTTP callbacks), schedules (cron), manual starts, and email ingestion.
+    values:
+      - webhook
+      - schedule
+      - manual
+      - email
+    tags:
+      - Core
+      - Workflows
+
+  - term: App
+    definition: >-
+      A Shuffle integration module that wraps the REST API of a security tool
+      (e.g., Splunk, VirusTotal, Jira). Apps are defined via OpenAPI specifications
+      and provide the actions available in workflows.
+    tags:
+      - Core
+      - Integration
+
+  - term: Execution
+    definition: >-
+      A single run of a workflow. Each execution has a unique ID, status, start/end
+      timestamps, and captures the results from all actions in the workflow run.
+    values:
+      - EXECUTING
+      - FINISHED
+      - ABORTED
+      - FAILED
+    tags:
+      - Workflows
+
+  - term: Execution Argument
+    definition: >-
+      Input data passed to a workflow when it is triggered. This data is available
+      to all actions in the workflow and typically contains the alert or event
+      that triggered the automation.
+    tags:
+      - Workflows
+
+  - term: Webhook
+    definition: >-
+      An HTTP endpoint automatically created by Shuffle that, when called, triggers
+      a specific workflow. Webhooks are the primary integration point for connecting
+      security tools (SIEMs, EDR, etc.) to Shuffle automation.
+    tags:
+      - Triggers
+      - Integration
+
+  - term: Schedule
+    definition: >-
+      A time-based trigger using cron expressions to run a workflow automatically
+      at configured intervals (e.g., every hour, daily).
+    tags:
+      - Triggers
+
+  - term: Organization
+    definition: >-
+      The top-level tenant in Shuffle. Organizations contain users, workflows,
+      apps, and configurations. Multi-tenancy is supported through sub-organizations.
+    tags:
+      - Administration
+
+  - term: Datastore
+    definition: >-
+      Shuffle's built-in key-value store for persisting data between workflow
+      executions. Used to maintain state, store IOCs, track seen events, and
+      share data between workflows.
+    tags:
+      - Data
+
+  - term: App Authentication
+    definition: >-
+      A named credential configuration for an app (e.g., "Splunk Production").
+      Authentication objects store API keys, tokens, or passwords and can be
+      referenced in workflow actions without exposing credentials directly.
+    tags:
+      - Security
+      - Authentication
+
+  - term: Environment
+    definition: >-
+      An execution worker environment in Shuffle (Orborus + Worker). Organizations
+      can have multiple environments for cloud vs. on-premises execution, enabling
+      hybrid deployments.
+    tags:
+      - Administration
+      - Infrastructure
+
+  - term: OpenAPI App
+    definition: >-
+      A Shuffle app generated from an OpenAPI specification. Users can import any
+      OpenAPI spec to instantly create an app with all documented endpoints as
+      actions, enabling rapid integration of any REST API.
+    tags:
+      - Integration
+      - Apps
+
+  - term: Bearer Token
+    definition: >-
+      The authentication method used by the Shuffle REST API. Users generate an
+      API key from their profile settings and include it as "Authorization: Bearer
+      <APIKEY>" in all API requests.
+    tags:
+      - Authentication
+      - API
+
+  - term: Execution Status
+    definition: >-
+      The lifecycle state of a workflow execution run.
+    values:
+      - EXECUTING: Currently running
+      - FINISHED: Completed successfully
+      - ABORTED: Manually stopped
+      - FAILED: Completed with errors
+    tags:
+      - Workflows
+
+categories:
+  - name: Core Concepts
+    terms:
+      - SOAR
+      - Workflow
+      - Action
+      - Trigger
+      - App
+  - name: Execution
+    terms:
+      - Execution
+      - Execution Argument
+      - Execution Status
+  - name: Triggers
+    terms:
+      - Webhook
+      - Schedule
+  - name: Integration
+    terms:
+      - OpenAPI App
+      - App Authentication
+  - name: Data
+    terms:
+      - Datastore
+  - name: Administration
+    terms:
+      - Organization
+      - Environment
+  - name: Authentication
+    terms:
+      - Bearer Token
+      - App Authentication

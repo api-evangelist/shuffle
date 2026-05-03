@@ -1,0 +1,90 @@
+extends: spectral:oas
+rules:
+  shuffle-operation-tags:
+    description: All operations must have at least one tag
+    message: "Operation must have at least one tag"
+    given: "$.paths[*][*]"
+    severity: error
+    then:
+      field: tags
+      function: truthy
+
+  shuffle-operation-summary:
+    description: All operations must have a summary
+    message: "Operation must have a summary"
+    given: "$.paths[*][*]"
+    severity: error
+    then:
+      field: summary
+      function: truthy
+
+  shuffle-bearer-auth:
+    description: API must use Bearer token authentication
+    message: "Security scheme must be HTTP Bearer"
+    given: "$.components.securitySchemes[*]"
+    severity: error
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          properties:
+            type:
+              enum: [http]
+            scheme:
+              enum: [bearer]
+
+  shuffle-api-response:
+    description: Standard API responses should include success boolean
+    message: "API response schemas should include success field"
+    given: "$.components.schemas.ApiResponse"
+    severity: warn
+    then:
+      field: properties.success
+      function: truthy
+
+  shuffle-workflow-id:
+    description: Workflow operations should use consistent id parameter naming
+    message: "Workflow path parameters should use 'id' for workflow identifier"
+    given: "$.paths['/workflows/{id}'][*].parameters[?(@.name == 'id')]"
+    severity: warn
+    then:
+      field: required
+      function: truthy
+
+  shuffle-response-200:
+    description: All operations must have a 200 response
+    message: "Operation must define a 200 response"
+    given: "$.paths[*][*].responses"
+    severity: error
+    then:
+      field: "200"
+      function: truthy
+
+  shuffle-response-401:
+    description: Operations should document 401 Unauthorized response
+    message: "Authenticated endpoints should document 401 response"
+    given: "$.paths[*].get.responses"
+    severity: warn
+    then:
+      field: "401"
+      function: defined
+
+  shuffle-operation-id:
+    description: All operations must have an operationId in camelCase
+    message: "Operation must have an operationId"
+    given: "$.paths[*][*]"
+    severity: error
+    then:
+      field: operationId
+      function: truthy
+
+  shuffle-v1-prefix:
+    description: All API paths should use /api/v1 prefix (reflected in servers)
+    message: "API version should be specified in server URL"
+    given: "$.servers[*]"
+    severity: warn
+    then:
+      field: url
+      function: pattern
+      functionOptions:
+        match: "^https?://.*/(api/)?v[0-9]"
