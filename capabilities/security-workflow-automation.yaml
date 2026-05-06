@@ -1,503 +1,736 @@
-naftiko: "1.0.0-alpha1"
-
+naftiko: 1.0.0-alpha2
 info:
-  label: "Shuffle Security Workflow Automation"
-  description: >-
-    Workflow capability for security operations automation using the Shuffle SOAR
-    platform. Enables SOC analysts and security engineers to manage automation
-    workflows, trigger security playbooks, monitor execution status, integrate
-    security tool apps, manage webhooks, and coordinate incident response
-    automation across the security tool stack.
+  label: Shuffle Security Workflow Automation
+  description: Workflow capability for security operations automation using the Shuffle SOAR platform. Enables SOC analysts
+    and security engineers to manage automation workflows, trigger security playbooks, monitor execution status, integrate
+    security tool apps, manage webhooks, and coordinate incident response automation across the security tool stack.
   tags:
-    - Security
-    - Automation
-    - SOAR
-    - Workflows
-    - Orchestration
-    - Incident Response
-    - Open Source
-  created: "2026-05-02"
-  modified: "2026-05-02"
-
+  - Security
+  - Automation
+  - SOAR
+  - Workflows
+  - Orchestration
+  - Incident Response
+  - Open Source
+  created: '2026-05-02'
+  modified: '2026-05-06'
 binds:
-  - namespace: env
-    keys:
-      SHUFFLE_API_KEY: SHUFFLE_API_KEY
-
+- namespace: env
+  keys:
+    SHUFFLE_API_KEY: SHUFFLE_API_KEY
 capability:
   consumes:
-    - import: shuffle
-      location: ./shared/shuffle.yaml
-
+  - type: http
+    namespace: shuffle
+    baseUri: https://shuffler.io/api/v1
+    description: Shuffle security automation platform REST API
+    authentication:
+      type: bearer
+      token: '{{SHUFFLE_API_KEY}}'
+    resources:
+    - name: workflows
+      path: /workflows
+      description: Security automation workflow management
+      operations:
+      - name: list-workflows
+        method: GET
+        description: List all workflows in the organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+      - name: create-workflow
+        method: POST
+        description: Create a new automation workflow
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            name: '{{tools.name}}'
+            description: '{{tools.description}}'
+      - name: get-workflow
+        method: GET
+        description: Get workflow details by ID
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Workflow ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: delete-workflow
+        method: DELETE
+        description: Delete a workflow by ID
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Workflow ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: execute-workflow
+        method: POST
+        description: Trigger a workflow execution
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Workflow ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            execution_argument: '{{tools.execution_argument}}'
+      - name: get-workflow-executions
+        method: GET
+        description: Get execution history for a workflow
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Workflow ID
+        - name: top
+          in: query
+          type: integer
+          required: false
+          description: Number of executions to return
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+      - name: abort-execution
+        method: GET
+        description: Abort a running workflow execution
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Workflow ID
+        - name: exec_id
+          in: path
+          type: string
+          required: true
+          description: Execution ID to abort
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: schedule-workflow
+        method: POST
+        description: Create a scheduled trigger for a workflow
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Workflow ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            frequency: '{{tools.frequency}}'
+            execution_argument: '{{tools.execution_argument}}'
+    - name: apps
+      path: /apps
+      description: Security tool app integrations
+      operations:
+      - name: list-apps
+        method: GET
+        description: List all available apps for the organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+      - name: search-apps
+        method: POST
+        description: Search the global app library
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+        body:
+          type: json
+          data:
+            search: '{{tools.search}}'
+      - name: list-app-authentications
+        method: GET
+        description: List all app authentication configurations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+    - name: triggers
+      path: /hooks
+      description: Webhook triggers for workflow initiation
+      operations:
+      - name: create-webhook
+        method: POST
+        description: Create a webhook trigger for a workflow
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            name: '{{tools.name}}'
+            type: webhook
+            workflow: '{{tools.workflow_id}}'
+      - name: delete-webhook
+        method: DELETE
+        description: Remove a webhook trigger
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Webhook ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: files
+      path: /files
+      description: File storage for workflow data
+      operations:
+      - name: list-files
+        method: GET
+        description: List all files in the organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+      - name: create-file
+        method: POST
+        description: Create a file record
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            filename: '{{tools.filename}}'
+            org_id: '{{tools.org_id}}'
+    - name: notifications
+      path: /notifications
+      description: Organization notification management
+      operations:
+      - name: list-notifications
+        method: GET
+        description: List notifications for the organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+      - name: create-notification
+        method: POST
+        description: Create a notification
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            title: '{{tools.title}}'
+            description: '{{tools.description}}'
+    - name: users
+      path: /users
+      description: User management
+      operations:
+      - name: list-users
+        method: GET
+        description: List all users in the organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+    - name: organizations
+      path: /orgs
+      description: Organization management
+      operations:
+      - name: list-organizations
+        method: GET
+        description: List all organizations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+      - name: get-org-stats
+        method: GET
+        description: Get usage statistics for an organization
+        inputParameters:
+        - name: org_id
+          in: path
+          type: string
+          required: true
+          description: Organization ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
   exposes:
-    - type: rest
-      port: 8080
-      namespace: shuffle-security-automation-api
-      description: "Unified REST API for Shuffle security workflow automation management."
-      resources:
-        - path: /v1/workflows
-          name: workflows
-          description: Security automation workflow management
-          operations:
-            - method: GET
-              name: list-workflows
-              description: List all security automation workflows
-              call: "shuffle.list-workflows"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-            - method: POST
-              name: create-workflow
-              description: Create a new security automation workflow
-              call: "shuffle.create-workflow"
-              with:
-                name: "rest.name"
-                description: "rest.description"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/workflows/{id}
-          name: workflow-detail
-          description: Individual workflow operations
-          operations:
-            - method: GET
-              name: get-workflow
-              description: Get workflow details and configuration
-              call: "shuffle.get-workflow"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: DELETE
-              name: delete-workflow
-              description: Delete a workflow
-              call: "shuffle.delete-workflow"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/workflows/{id}/execute
-          name: workflow-execute
-          description: Trigger workflow execution with security event data
-          operations:
-            - method: POST
-              name: execute-workflow
-              description: Execute a security automation workflow
-              call: "shuffle.execute-workflow"
-              with:
-                id: "rest.id"
-                execution_argument: "rest.execution_argument"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/workflows/{id}/executions
-          name: workflow-executions
-          description: Workflow execution history
-          operations:
-            - method: GET
-              name: get-executions
-              description: Get execution history for a workflow
-              call: "shuffle.get-workflow-executions"
-              with:
-                id: "rest.id"
-                top: "rest.top"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-
-        - path: /v1/workflows/{id}/executions/{exec_id}/abort
-          name: abort-execution
-          description: Abort a running workflow execution
-          operations:
-            - method: GET
-              name: abort-execution
-              description: Stop a running workflow execution
-              call: "shuffle.abort-execution"
-              with:
-                id: "rest.id"
-                exec_id: "rest.exec_id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/workflows/{id}/schedule
-          name: workflow-schedule
-          description: Schedule workflows to run on a cron interval
-          operations:
-            - method: POST
-              name: schedule-workflow
-              description: Create a scheduled trigger for a workflow
-              call: "shuffle.schedule-workflow"
-              with:
-                id: "rest.id"
-                frequency: "rest.frequency"
-                execution_argument: "rest.execution_argument"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/apps
-          name: apps
-          description: Security tool app integrations
-          operations:
-            - method: GET
-              name: list-apps
-              description: List all available security tool apps
-              call: "shuffle.list-apps"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-
-        - path: /v1/apps/search
-          name: apps-search
-          description: Search the global app library
-          operations:
-            - method: POST
-              name: search-apps
-              description: Search for security tool apps by name or category
-              call: "shuffle.search-apps"
-              with:
-                search: "rest.search"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-
-        - path: /v1/apps/authentications
-          name: app-authentications
-          description: App credential configurations
-          operations:
-            - method: GET
-              name: list-authentications
-              description: List all app authentication configurations
-              call: "shuffle.list-app-authentications"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-
-        - path: /v1/webhooks
-          name: webhooks
-          description: Webhook trigger management
-          operations:
-            - method: POST
-              name: create-webhook
-              description: Create a webhook trigger to start a workflow from external systems
-              call: "shuffle.create-webhook"
-              with:
-                name: "rest.name"
-                workflow_id: "rest.workflow_id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/webhooks/{id}
-          name: webhook-detail
-          description: Individual webhook operations
-          operations:
-            - method: DELETE
-              name: delete-webhook
-              description: Remove a webhook trigger
-              call: "shuffle.delete-webhook"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/files
-          name: files
-          description: Workflow file storage
-          operations:
-            - method: GET
-              name: list-files
-              description: List all files in the organization
-              call: "shuffle.list-files"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-
-        - path: /v1/notifications
-          name: notifications
-          description: Organization notifications for security events
-          operations:
-            - method: GET
-              name: list-notifications
-              description: List security notifications
-              call: "shuffle.list-notifications"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-            - method: POST
-              name: create-notification
-              description: Create a security notification
-              call: "shuffle.create-notification"
-              with:
-                title: "rest.title"
-                description: "rest.description"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/users
-          name: users
-          description: Organization user management
-          operations:
-            - method: GET
-              name: list-users
-              description: List all users in the organization
-              call: "shuffle.list-users"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-
-        - path: /v1/organizations
-          name: organizations
-          description: Organization management
-          operations:
-            - method: GET
-              name: list-organizations
-              description: List all organizations
-              call: "shuffle.list-organizations"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-
-    - type: mcp
-      port: 9090
-      namespace: shuffle-security-automation-mcp
-      transport: http
-      description: "MCP server for AI-assisted security workflow automation and orchestration."
-      tools:
-        - name: list-workflows
-          description: >-
-            List all security automation workflows in the Shuffle organization,
-            including their names, descriptions, status, and tags.
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "shuffle.list-workflows"
-          outputParameters:
-            - type: array
-              mapping: "$."
-
-        - name: get-workflow
-          description: >-
-            Get the full configuration of a specific Shuffle security automation
-            workflow including all actions, triggers, and variables.
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "shuffle.get-workflow"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: create-workflow
-          description: >-
-            Create a new security automation workflow in Shuffle. The workflow
-            starts as a draft and can be configured with actions and triggers.
-          hints:
-            readOnly: false
-            destructive: false
-            idempotent: false
-          call: "shuffle.create-workflow"
-          with:
-            name: "tools.name"
-            description: "tools.description"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: execute-workflow
-          description: >-
-            Trigger execution of a Shuffle security automation workflow with
-            optional input data (e.g., alert JSON, incident details). Returns
-            an execution ID for status polling.
-          hints:
-            readOnly: false
-            destructive: false
-            idempotent: false
-          call: "shuffle.execute-workflow"
-          with:
-            id: "tools.id"
-            execution_argument: "tools.execution_argument"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: get-workflow-executions
-          description: >-
-            Get the execution history for a workflow, showing past runs with
-            their status (EXECUTING, FINISHED, ABORTED, FAILED) and timestamps.
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "shuffle.get-workflow-executions"
-          with:
-            id: "tools.id"
-            top: "tools.top"
-          outputParameters:
-            - type: array
-              mapping: "$."
-
-        - name: abort-execution
-          description: >-
-            Abort a currently running workflow execution. Use when a security
-            automation is running incorrectly or needs to be stopped.
-          hints:
-            readOnly: false
-            destructive: true
-            idempotent: true
-          call: "shuffle.abort-execution"
-          with:
-            id: "tools.id"
-            exec_id: "tools.exec_id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: schedule-workflow
-          description: >-
-            Create a scheduled trigger to run a workflow automatically at a
-            specified cron interval (e.g., every hour, daily at midnight).
-          hints:
-            readOnly: false
-            destructive: false
-            idempotent: false
-          call: "shuffle.schedule-workflow"
-          with:
-            id: "tools.id"
-            frequency: "tools.frequency"
-            execution_argument: "tools.execution_argument"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: list-apps
-          description: >-
-            List all security tool apps available in the Shuffle organization,
-            including built-in apps and custom integrations.
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "shuffle.list-apps"
-          outputParameters:
-            - type: array
-              mapping: "$."
-
-        - name: search-apps
-          description: >-
-            Search the Shuffle global app library for security tool integrations
-            by name or category (e.g., SIEM, EDR, ticketing).
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "shuffle.search-apps"
-          with:
-            search: "tools.search"
-          outputParameters:
-            - type: array
-              mapping: "$."
-
-        - name: list-app-authentications
-          description: >-
-            List all configured app authentication credentials in the organization,
-            showing which tools are connected to Shuffle.
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "shuffle.list-app-authentications"
-          outputParameters:
-            - type: array
-              mapping: "$."
-
-        - name: create-webhook
-          description: >-
-            Create a webhook trigger that will start a specified workflow when
-            the webhook URL receives an HTTP request (e.g., from a SIEM alert).
-          hints:
-            readOnly: false
-            destructive: false
-            idempotent: false
-          call: "shuffle.create-webhook"
-          with:
-            name: "tools.name"
-            workflow_id: "tools.workflow_id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: delete-webhook
-          description: Remove a webhook trigger from the organization.
-          hints:
-            readOnly: false
-            destructive: true
-            idempotent: true
-          call: "shuffle.delete-webhook"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: list-notifications
-          description: >-
-            List security notifications in the Shuffle organization, filterable
-            by status, type, and severity.
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "shuffle.list-notifications"
-          outputParameters:
-            - type: array
-              mapping: "$."
-
-        - name: create-notification
-          description: Create a security notification in the Shuffle platform.
-          hints:
-            readOnly: false
-            destructive: false
-            idempotent: false
-          call: "shuffle.create-notification"
-          with:
-            title: "tools.title"
-            description: "tools.description"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: list-users
-          description: List all users in the Shuffle organization.
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "shuffle.list-users"
-          outputParameters:
-            - type: array
-              mapping: "$."
-
-        - name: list-files
-          description: List all files stored in the Shuffle organization file store.
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "shuffle.list-files"
-          outputParameters:
-            - type: array
-              mapping: "$."
-
-        - name: list-organizations
-          description: List all organizations accessible to the authenticated user.
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "shuffle.list-organizations"
-          outputParameters:
-            - type: array
-              mapping: "$."
+  - type: rest
+    port: 8080
+    namespace: shuffle-security-automation-api
+    description: Unified REST API for Shuffle security workflow automation management.
+    resources:
+    - path: /v1/workflows
+      name: workflows
+      description: Security automation workflow management
+      operations:
+      - method: GET
+        name: list-workflows
+        description: List all security automation workflows
+        call: shuffle.list-workflows
+        outputParameters:
+        - type: array
+          mapping: $.
+      - method: POST
+        name: create-workflow
+        description: Create a new security automation workflow
+        call: shuffle.create-workflow
+        with:
+          name: rest.name
+          description: rest.description
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workflows/{id}
+      name: workflow-detail
+      description: Individual workflow operations
+      operations:
+      - method: GET
+        name: get-workflow
+        description: Get workflow details and configuration
+        call: shuffle.get-workflow
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: delete-workflow
+        description: Delete a workflow
+        call: shuffle.delete-workflow
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workflows/{id}/execute
+      name: workflow-execute
+      description: Trigger workflow execution with security event data
+      operations:
+      - method: POST
+        name: execute-workflow
+        description: Execute a security automation workflow
+        call: shuffle.execute-workflow
+        with:
+          id: rest.id
+          execution_argument: rest.execution_argument
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workflows/{id}/executions
+      name: workflow-executions
+      description: Workflow execution history
+      operations:
+      - method: GET
+        name: get-executions
+        description: Get execution history for a workflow
+        call: shuffle.get-workflow-executions
+        with:
+          id: rest.id
+          top: rest.top
+        outputParameters:
+        - type: array
+          mapping: $.
+    - path: /v1/workflows/{id}/executions/{exec_id}/abort
+      name: abort-execution
+      description: Abort a running workflow execution
+      operations:
+      - method: GET
+        name: abort-execution
+        description: Stop a running workflow execution
+        call: shuffle.abort-execution
+        with:
+          id: rest.id
+          exec_id: rest.exec_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workflows/{id}/schedule
+      name: workflow-schedule
+      description: Schedule workflows to run on a cron interval
+      operations:
+      - method: POST
+        name: schedule-workflow
+        description: Create a scheduled trigger for a workflow
+        call: shuffle.schedule-workflow
+        with:
+          id: rest.id
+          frequency: rest.frequency
+          execution_argument: rest.execution_argument
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/apps
+      name: apps
+      description: Security tool app integrations
+      operations:
+      - method: GET
+        name: list-apps
+        description: List all available security tool apps
+        call: shuffle.list-apps
+        outputParameters:
+        - type: array
+          mapping: $.
+    - path: /v1/apps/search
+      name: apps-search
+      description: Search the global app library
+      operations:
+      - method: POST
+        name: search-apps
+        description: Search for security tool apps by name or category
+        call: shuffle.search-apps
+        with:
+          search: rest.search
+        outputParameters:
+        - type: array
+          mapping: $.
+    - path: /v1/apps/authentications
+      name: app-authentications
+      description: App credential configurations
+      operations:
+      - method: GET
+        name: list-authentications
+        description: List all app authentication configurations
+        call: shuffle.list-app-authentications
+        outputParameters:
+        - type: array
+          mapping: $.
+    - path: /v1/webhooks
+      name: webhooks
+      description: Webhook trigger management
+      operations:
+      - method: POST
+        name: create-webhook
+        description: Create a webhook trigger to start a workflow from external systems
+        call: shuffle.create-webhook
+        with:
+          name: rest.name
+          workflow_id: rest.workflow_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/webhooks/{id}
+      name: webhook-detail
+      description: Individual webhook operations
+      operations:
+      - method: DELETE
+        name: delete-webhook
+        description: Remove a webhook trigger
+        call: shuffle.delete-webhook
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/files
+      name: files
+      description: Workflow file storage
+      operations:
+      - method: GET
+        name: list-files
+        description: List all files in the organization
+        call: shuffle.list-files
+        outputParameters:
+        - type: array
+          mapping: $.
+    - path: /v1/notifications
+      name: notifications
+      description: Organization notifications for security events
+      operations:
+      - method: GET
+        name: list-notifications
+        description: List security notifications
+        call: shuffle.list-notifications
+        outputParameters:
+        - type: array
+          mapping: $.
+      - method: POST
+        name: create-notification
+        description: Create a security notification
+        call: shuffle.create-notification
+        with:
+          title: rest.title
+          description: rest.description
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users
+      name: users
+      description: Organization user management
+      operations:
+      - method: GET
+        name: list-users
+        description: List all users in the organization
+        call: shuffle.list-users
+        outputParameters:
+        - type: array
+          mapping: $.
+    - path: /v1/organizations
+      name: organizations
+      description: Organization management
+      operations:
+      - method: GET
+        name: list-organizations
+        description: List all organizations
+        call: shuffle.list-organizations
+        outputParameters:
+        - type: array
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: shuffle-security-automation-mcp
+    transport: http
+    description: MCP server for AI-assisted security workflow automation and orchestration.
+    tools:
+    - name: list-workflows
+      description: List all security automation workflows in the Shuffle organization, including their names, descriptions,
+        status, and tags.
+      hints:
+        readOnly: true
+        openWorld: false
+      call: shuffle.list-workflows
+      outputParameters:
+      - type: array
+        mapping: $.
+    - name: get-workflow
+      description: Get the full configuration of a specific Shuffle security automation workflow including all actions, triggers,
+        and variables.
+      hints:
+        readOnly: true
+        openWorld: false
+      call: shuffle.get-workflow
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-workflow
+      description: Create a new security automation workflow in Shuffle. The workflow starts as a draft and can be configured
+        with actions and triggers.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: shuffle.create-workflow
+      with:
+        name: tools.name
+        description: tools.description
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: execute-workflow
+      description: Trigger execution of a Shuffle security automation workflow with optional input data (e.g., alert JSON,
+        incident details). Returns an execution ID for status polling.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: shuffle.execute-workflow
+      with:
+        id: tools.id
+        execution_argument: tools.execution_argument
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-workflow-executions
+      description: Get the execution history for a workflow, showing past runs with their status (EXECUTING, FINISHED, ABORTED,
+        FAILED) and timestamps.
+      hints:
+        readOnly: true
+        openWorld: false
+      call: shuffle.get-workflow-executions
+      with:
+        id: tools.id
+        top: tools.top
+      outputParameters:
+      - type: array
+        mapping: $.
+    - name: abort-execution
+      description: Abort a currently running workflow execution. Use when a security automation is running incorrectly or
+        needs to be stopped.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: shuffle.abort-execution
+      with:
+        id: tools.id
+        exec_id: tools.exec_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: schedule-workflow
+      description: Create a scheduled trigger to run a workflow automatically at a specified cron interval (e.g., every hour,
+        daily at midnight).
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: shuffle.schedule-workflow
+      with:
+        id: tools.id
+        frequency: tools.frequency
+        execution_argument: tools.execution_argument
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-apps
+      description: List all security tool apps available in the Shuffle organization, including built-in apps and custom integrations.
+      hints:
+        readOnly: true
+        openWorld: false
+      call: shuffle.list-apps
+      outputParameters:
+      - type: array
+        mapping: $.
+    - name: search-apps
+      description: Search the Shuffle global app library for security tool integrations by name or category (e.g., SIEM, EDR,
+        ticketing).
+      hints:
+        readOnly: true
+        openWorld: true
+      call: shuffle.search-apps
+      with:
+        search: tools.search
+      outputParameters:
+      - type: array
+        mapping: $.
+    - name: list-app-authentications
+      description: List all configured app authentication credentials in the organization, showing which tools are connected
+        to Shuffle.
+      hints:
+        readOnly: true
+        openWorld: false
+      call: shuffle.list-app-authentications
+      outputParameters:
+      - type: array
+        mapping: $.
+    - name: create-webhook
+      description: Create a webhook trigger that will start a specified workflow when the webhook URL receives an HTTP request
+        (e.g., from a SIEM alert).
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: shuffle.create-webhook
+      with:
+        name: tools.name
+        workflow_id: tools.workflow_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-webhook
+      description: Remove a webhook trigger from the organization.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: shuffle.delete-webhook
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-notifications
+      description: List security notifications in the Shuffle organization, filterable by status, type, and severity.
+      hints:
+        readOnly: true
+        openWorld: false
+      call: shuffle.list-notifications
+      outputParameters:
+      - type: array
+        mapping: $.
+    - name: create-notification
+      description: Create a security notification in the Shuffle platform.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: shuffle.create-notification
+      with:
+        title: tools.title
+        description: tools.description
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-users
+      description: List all users in the Shuffle organization.
+      hints:
+        readOnly: true
+        openWorld: false
+      call: shuffle.list-users
+      outputParameters:
+      - type: array
+        mapping: $.
+    - name: list-files
+      description: List all files stored in the Shuffle organization file store.
+      hints:
+        readOnly: true
+        openWorld: false
+      call: shuffle.list-files
+      outputParameters:
+      - type: array
+        mapping: $.
+    - name: list-organizations
+      description: List all organizations accessible to the authenticated user.
+      hints:
+        readOnly: true
+        openWorld: false
+      call: shuffle.list-organizations
+      outputParameters:
+      - type: array
+        mapping: $.
