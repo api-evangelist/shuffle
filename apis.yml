@@ -43,7 +43,7 @@ apis:
     properties:
       - type: Documentation
         url: https://shuffler.io/docs
-      - type: ApiReference
+      - type: APIReference
         url: https://shuffler.io/docs/API
       - type: GettingStarted
         url: https://shuffler.io/docs/getting_started
