@@ -1,0 +1,245 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Shuffle API — Datastore
+  description: 'Shuffle API — Datastore. 4 operations. Lead operation: Delete Cache Item. Self-contained Naftiko capability
+    covering one Shuffle business surface.'
+  tags:
+  - Shuffle
+  - Datastore
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SHUFFLE_API_KEY: SHUFFLE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: shuffle-datastore
+    baseUri: https://shuffler.io/api/v1
+    description: Shuffle API — Datastore business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org_id-delete_cache
+      path: /orgs/{org_id}/delete_cache
+      operations:
+      - name: deletecache
+        method: POST
+        description: Delete Cache Item
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: org_id
+          in: path
+          type: string
+          description: Organization ID
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: orgs-org_id-get_cache
+      path: /orgs/{org_id}/get_cache
+      operations:
+      - name: getcache
+        method: POST
+        description: Get Cache Value
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: org_id
+          in: path
+          type: string
+          description: Organization ID
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: orgs-org_id-list_cache
+      path: /orgs/{org_id}/list_cache
+      operations:
+      - name: listcache
+        method: GET
+        description: List Cache Items
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: org_id
+          in: path
+          type: string
+          description: Organization ID
+          required: true
+        - name: top
+          in: query
+          type: integer
+          description: Number of items to return
+        - name: cursor
+          in: query
+          type: string
+          description: Pagination cursor
+        - name: category
+          in: query
+          type: string
+          description: Filter by category
+    - name: orgs-org_id-set_cache
+      path: /orgs/{org_id}/set_cache
+      operations:
+      - name: setcache
+        method: POST
+        description: Set Cache Value
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: org_id
+          in: path
+          type: string
+          description: Organization ID
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.SHUFFLE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: shuffle-datastore-rest
+    port: 8080
+    description: REST adapter for Shuffle API — Datastore. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org-id}/delete-cache
+      name: orgs-org-id-delete-cache
+      description: REST surface for orgs-org_id-delete_cache.
+      operations:
+      - method: POST
+        name: deletecache
+        description: Delete Cache Item
+        call: shuffle-datastore.deletecache
+        with:
+          org_id: rest.org_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org-id}/get-cache
+      name: orgs-org-id-get-cache
+      description: REST surface for orgs-org_id-get_cache.
+      operations:
+      - method: POST
+        name: getcache
+        description: Get Cache Value
+        call: shuffle-datastore.getcache
+        with:
+          org_id: rest.org_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org-id}/list-cache
+      name: orgs-org-id-list-cache
+      description: REST surface for orgs-org_id-list_cache.
+      operations:
+      - method: GET
+        name: listcache
+        description: List Cache Items
+        call: shuffle-datastore.listcache
+        with:
+          org_id: rest.org_id
+          top: rest.top
+          cursor: rest.cursor
+          category: rest.category
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org-id}/set-cache
+      name: orgs-org-id-set-cache
+      description: REST surface for orgs-org_id-set_cache.
+      operations:
+      - method: POST
+        name: setcache
+        description: Set Cache Value
+        call: shuffle-datastore.setcache
+        with:
+          org_id: rest.org_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: shuffle-datastore-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Shuffle API — Datastore. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: delete-cache-item
+      description: Delete Cache Item
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: shuffle-datastore.deletecache
+      with:
+        org_id: tools.org_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-cache-value
+      description: Get Cache Value
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: shuffle-datastore.getcache
+      with:
+        org_id: tools.org_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-cache-items
+      description: List Cache Items
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: shuffle-datastore.listcache
+      with:
+        org_id: tools.org_id
+        top: tools.top
+        cursor: tools.cursor
+        category: tools.category
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: set-cache-value
+      description: Set Cache Value
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: shuffle-datastore.setcache
+      with:
+        org_id: tools.org_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,196 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Shuffle API — Organizations
+  description: 'Shuffle API — Organizations. 4 operations. Lead operation: List Organizations. Self-contained Naftiko capability
+    covering one Shuffle business surface.'
+  tags:
+  - Shuffle
+  - Organizations
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SHUFFLE_API_KEY: SHUFFLE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: shuffle-organizations
+    baseUri: https://shuffler.io/api/v1
+    description: Shuffle API — Organizations business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs
+      path: /orgs
+      operations:
+      - name: listorganizations
+        method: GET
+        description: List Organizations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-id
+      path: /orgs/{id}
+      operations:
+      - name: getorganization
+        method: GET
+        description: Get Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Organization ID
+          required: true
+      - name: updateorganization
+        method: POST
+        description: Update Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Organization ID
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: orgs-org_id-stats
+      path: /orgs/{org_id}/stats
+      operations:
+      - name: getorganizationstats
+        method: GET
+        description: Get Organization Stats
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: org_id
+          in: path
+          type: string
+          description: Organization ID
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.SHUFFLE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: shuffle-organizations-rest
+    port: 8080
+    description: REST adapter for Shuffle API — Organizations. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs
+      name: orgs
+      description: REST surface for orgs.
+      operations:
+      - method: GET
+        name: listorganizations
+        description: List Organizations
+        call: shuffle-organizations.listorganizations
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{id}
+      name: orgs-id
+      description: REST surface for orgs-id.
+      operations:
+      - method: GET
+        name: getorganization
+        description: Get Organization
+        call: shuffle-organizations.getorganization
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: updateorganization
+        description: Update Organization
+        call: shuffle-organizations.updateorganization
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org-id}/stats
+      name: orgs-org-id-stats
+      description: REST surface for orgs-org_id-stats.
+      operations:
+      - method: GET
+        name: getorganizationstats
+        description: Get Organization Stats
+        call: shuffle-organizations.getorganizationstats
+        with:
+          org_id: rest.org_id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: shuffle-organizations-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Shuffle API — Organizations. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-organizations
+      description: List Organizations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: shuffle-organizations.listorganizations
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-organization
+      description: Get Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: shuffle-organizations.getorganization
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-organization
+      description: Update Organization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: shuffle-organizations.updateorganization
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-organization-stats
+      description: Get Organization Stats
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: shuffle-organizations.getorganizationstats
+      with:
+        org_id: tools.org_id
+      outputParameters:
+      - type: object
+        mapping: $.

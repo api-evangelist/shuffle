@@ -1,0 +1,286 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Shuffle API — Files
+  description: 'Shuffle API — Files. 6 operations. Lead operation: List Files. Self-contained Naftiko capability covering
+    one Shuffle business surface.'
+  tags:
+  - Shuffle
+  - Files
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SHUFFLE_API_KEY: SHUFFLE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: shuffle-files
+    baseUri: https://shuffler.io/api/v1
+    description: Shuffle API — Files business capability. Self-contained, no shared references.
+    resources:
+    - name: files
+      path: /files
+      operations:
+      - name: listfiles
+        method: GET
+        description: List Files
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: files-create
+      path: /files/create
+      operations:
+      - name: createfile
+        method: POST
+        description: Create File
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: files-id
+      path: /files/{id}
+      operations:
+      - name: getfilemetadata
+        method: POST
+        description: Get File Metadata
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: File ID
+          required: true
+      - name: deletefile
+        method: DELETE
+        description: Delete File
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: File ID
+          required: true
+        - name: remove_metadata
+          in: query
+          type: boolean
+          description: Whether to also remove file metadata
+    - name: files-id-content
+      path: /files/{id}/content
+      operations:
+      - name: getfilecontent
+        method: GET
+        description: Get File Content
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: File ID
+          required: true
+    - name: files-id-upload
+      path: /files/{id}/upload
+      operations:
+      - name: uploadfile
+        method: POST
+        description: Upload File Content
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: File ID
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.SHUFFLE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: shuffle-files-rest
+    port: 8080
+    description: REST adapter for Shuffle API — Files. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/files
+      name: files
+      description: REST surface for files.
+      operations:
+      - method: GET
+        name: listfiles
+        description: List Files
+        call: shuffle-files.listfiles
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/files/create
+      name: files-create
+      description: REST surface for files-create.
+      operations:
+      - method: POST
+        name: createfile
+        description: Create File
+        call: shuffle-files.createfile
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/files/{id}
+      name: files-id
+      description: REST surface for files-id.
+      operations:
+      - method: POST
+        name: getfilemetadata
+        description: Get File Metadata
+        call: shuffle-files.getfilemetadata
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletefile
+        description: Delete File
+        call: shuffle-files.deletefile
+        with:
+          id: rest.id
+          remove_metadata: rest.remove_metadata
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/files/{id}/content
+      name: files-id-content
+      description: REST surface for files-id-content.
+      operations:
+      - method: GET
+        name: getfilecontent
+        description: Get File Content
+        call: shuffle-files.getfilecontent
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/files/{id}/upload
+      name: files-id-upload
+      description: REST surface for files-id-upload.
+      operations:
+      - method: POST
+        name: uploadfile
+        description: Upload File Content
+        call: shuffle-files.uploadfile
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: shuffle-files-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Shuffle API — Files. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-files
+      description: List Files
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: shuffle-files.listfiles
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-file
+      description: Create File
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: shuffle-files.createfile
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-file-metadata
+      description: Get File Metadata
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: shuffle-files.getfilemetadata
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-file
+      description: Delete File
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: shuffle-files.deletefile
+      with:
+        id: tools.id
+        remove_metadata: tools.remove_metadata
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-file-content
+      description: Get File Content
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: shuffle-files.getfilecontent
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: upload-file-content
+      description: Upload File Content
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: shuffle-files.uploadfile
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

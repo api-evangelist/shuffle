@@ -1,0 +1,557 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Shuffle API — Workflows
+  description: 'Shuffle API — Workflows. 12 operations. Lead operation: Get Execution Results. Self-contained Naftiko capability
+    covering one Shuffle business surface.'
+  tags:
+  - Shuffle
+  - Workflows
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SHUFFLE_API_KEY: SHUFFLE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: shuffle-workflows
+    baseUri: https://shuffler.io/api/v1
+    description: Shuffle API — Workflows business capability. Self-contained, no shared references.
+    resources:
+    - name: streams-results
+      path: /streams/results
+      operations:
+      - name: getexecutionresults
+        method: POST
+        description: Get Execution Results
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: workflows
+      path: /workflows
+      operations:
+      - name: listworkflows
+        method: GET
+        description: List Workflows
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: truncate
+          in: query
+          type: boolean
+          description: Whether to truncate workflow details in the response
+      - name: createworkflow
+        method: POST
+        description: Create Workflow
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: workflows-schedules
+      path: /workflows/schedules
+      operations:
+      - name: listworkflowschedules
+        method: GET
+        description: List Workflow Schedules
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: workflows-id
+      path: /workflows/{id}
+      operations:
+      - name: getworkflow
+        method: GET
+        description: Get Workflow
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Workflow ID
+          required: true
+      - name: updateworkflow
+        method: PUT
+        description: Update Workflow
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Workflow ID
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deleteworkflow
+        method: DELETE
+        description: Delete Workflow
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Workflow ID
+          required: true
+    - name: workflows-id-execute
+      path: /workflows/{id}/execute
+      operations:
+      - name: executeworkflow
+        method: POST
+        description: Execute Workflow
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Workflow ID
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: workflows-id-executions
+      path: /workflows/{id}/executions
+      operations:
+      - name: getworkflowexecutions
+        method: GET
+        description: Get Workflow Executions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Workflow ID
+          required: true
+        - name: top
+          in: query
+          type: integer
+          description: Number of executions to return
+        - name: cursor
+          in: query
+          type: string
+          description: Pagination cursor
+    - name: workflows-id-executions-exec_id-abort
+      path: /workflows/{id}/executions/{exec_id}/abort
+      operations:
+      - name: abortworkflowexecution
+        method: GET
+        description: Abort Workflow Execution
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Workflow ID
+          required: true
+        - name: exec_id
+          in: path
+          type: string
+          description: Execution ID to abort
+          required: true
+    - name: workflows-id-schedule
+      path: /workflows/{id}/schedule
+      operations:
+      - name: scheduleworkflow
+        method: POST
+        description: Schedule Workflow
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Workflow ID
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: workflows-id-schedule-sched_id
+      path: /workflows/{id}/schedule/{sched_id}
+      operations:
+      - name: deleteworkflowschedule
+        method: DELETE
+        description: Delete Workflow Schedule
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Workflow ID
+          required: true
+        - name: sched_id
+          in: path
+          type: string
+          description: Schedule ID to delete
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.SHUFFLE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: shuffle-workflows-rest
+    port: 8080
+    description: REST adapter for Shuffle API — Workflows. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/streams/results
+      name: streams-results
+      description: REST surface for streams-results.
+      operations:
+      - method: POST
+        name: getexecutionresults
+        description: Get Execution Results
+        call: shuffle-workflows.getexecutionresults
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workflows
+      name: workflows
+      description: REST surface for workflows.
+      operations:
+      - method: GET
+        name: listworkflows
+        description: List Workflows
+        call: shuffle-workflows.listworkflows
+        with:
+          truncate: rest.truncate
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createworkflow
+        description: Create Workflow
+        call: shuffle-workflows.createworkflow
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workflows/schedules
+      name: workflows-schedules
+      description: REST surface for workflows-schedules.
+      operations:
+      - method: GET
+        name: listworkflowschedules
+        description: List Workflow Schedules
+        call: shuffle-workflows.listworkflowschedules
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workflows/{id}
+      name: workflows-id
+      description: REST surface for workflows-id.
+      operations:
+      - method: GET
+        name: getworkflow
+        description: Get Workflow
+        call: shuffle-workflows.getworkflow
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updateworkflow
+        description: Update Workflow
+        call: shuffle-workflows.updateworkflow
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteworkflow
+        description: Delete Workflow
+        call: shuffle-workflows.deleteworkflow
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workflows/{id}/execute
+      name: workflows-id-execute
+      description: REST surface for workflows-id-execute.
+      operations:
+      - method: POST
+        name: executeworkflow
+        description: Execute Workflow
+        call: shuffle-workflows.executeworkflow
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workflows/{id}/executions
+      name: workflows-id-executions
+      description: REST surface for workflows-id-executions.
+      operations:
+      - method: GET
+        name: getworkflowexecutions
+        description: Get Workflow Executions
+        call: shuffle-workflows.getworkflowexecutions
+        with:
+          id: rest.id
+          top: rest.top
+          cursor: rest.cursor
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workflows/{id}/executions/{exec-id}/abort
+      name: workflows-id-executions-exec-id-abort
+      description: REST surface for workflows-id-executions-exec_id-abort.
+      operations:
+      - method: GET
+        name: abortworkflowexecution
+        description: Abort Workflow Execution
+        call: shuffle-workflows.abortworkflowexecution
+        with:
+          id: rest.id
+          exec_id: rest.exec_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workflows/{id}/schedule
+      name: workflows-id-schedule
+      description: REST surface for workflows-id-schedule.
+      operations:
+      - method: POST
+        name: scheduleworkflow
+        description: Schedule Workflow
+        call: shuffle-workflows.scheduleworkflow
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workflows/{id}/schedule/{sched-id}
+      name: workflows-id-schedule-sched-id
+      description: REST surface for workflows-id-schedule-sched_id.
+      operations:
+      - method: DELETE
+        name: deleteworkflowschedule
+        description: Delete Workflow Schedule
+        call: shuffle-workflows.deleteworkflowschedule
+        with:
+          id: rest.id
+          sched_id: rest.sched_id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: shuffle-workflows-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Shuffle API — Workflows. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: get-execution-results
+      description: Get Execution Results
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: shuffle-workflows.getexecutionresults
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-workflows
+      description: List Workflows
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: shuffle-workflows.listworkflows
+      with:
+        truncate: tools.truncate
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-workflow
+      description: Create Workflow
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: shuffle-workflows.createworkflow
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-workflow-schedules
+      description: List Workflow Schedules
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: shuffle-workflows.listworkflowschedules
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-workflow
+      description: Get Workflow
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: shuffle-workflows.getworkflow
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-workflow
+      description: Update Workflow
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: shuffle-workflows.updateworkflow
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-workflow
+      description: Delete Workflow
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: shuffle-workflows.deleteworkflow
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: execute-workflow
+      description: Execute Workflow
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: shuffle-workflows.executeworkflow
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-workflow-executions
+      description: Get Workflow Executions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: shuffle-workflows.getworkflowexecutions
+      with:
+        id: tools.id
+        top: tools.top
+        cursor: tools.cursor
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: abort-workflow-execution
+      description: Abort Workflow Execution
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: shuffle-workflows.abortworkflowexecution
+      with:
+        id: tools.id
+        exec_id: tools.exec_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: schedule-workflow
+      description: Schedule Workflow
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: shuffle-workflows.scheduleworkflow
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-workflow-schedule
+      description: Delete Workflow Schedule
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: shuffle-workflows.deleteworkflowschedule
+      with:
+        id: tools.id
+        sched_id: tools.sched_id
+      outputParameters:
+      - type: object
+        mapping: $.
