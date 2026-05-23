@@ -53,6 +53,9 @@ apis:
     url: https://shuffler.io
   - type: Blog
     url: https://medium.com/shuffle-automation
+  - url: https://medium.com/feed/shuffle-automation
+    type: BlogRSS
+    description: Discovered RSS/Atom feed for https://medium.com/shuffle-automation
   - type: Discord
     url: https://discord.com/invite/B2CBzUm
   - type: OpenAPI
