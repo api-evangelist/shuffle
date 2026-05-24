@@ -21,6 +21,8 @@ specificationVersion: '0.19'
 common:
 - type: LinkedIn
   url: https://www.linkedin.com/company/shuffleeditor
+- type: LLMsTxt
+  url: https://shuffler.io/llms.txt
 apis:
 - aid: shuffle:shuffle-api
   name: Shuffle API
