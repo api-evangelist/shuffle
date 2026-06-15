@@ -1,0 +1,961 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Shuffle API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workflows",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Workflows",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/workflows",
+            "params": [
+              {
+                "name": "truncate",
+                "value": "",
+                "type": "query",
+                "description": "Whether to truncate workflow details in the response"
+              }
+            ]
+          },
+          "docs": "Returns all workflows accessible to the authenticated user."
+        },
+        {
+          "info": {
+            "name": "Create Workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/workflows",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new automation workflow."
+        },
+        {
+          "info": {
+            "name": "Get Workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/workflows/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              }
+            ]
+          },
+          "docs": "Retrieves a specific workflow by ID."
+        },
+        {
+          "info": {
+            "name": "Update Workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://shuffler.io/api/v1/workflows/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an existing workflow with a full workflow object."
+        },
+        {
+          "info": {
+            "name": "Delete Workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://shuffler.io/api/v1/workflows/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              }
+            ]
+          },
+          "docs": "Deletes a workflow by ID."
+        },
+        {
+          "info": {
+            "name": "Execute Workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/workflows/:id/execute",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Triggers execution of a workflow with an optional execution argument."
+        },
+        {
+          "info": {
+            "name": "Get Workflow Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/workflows/:id/executions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              },
+              {
+                "name": "top",
+                "value": "",
+                "type": "query",
+                "description": "Number of executions to return"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor"
+              }
+            ]
+          },
+          "docs": "Returns the execution history for a workflow."
+        },
+        {
+          "info": {
+            "name": "Abort Workflow Execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/workflows/:id/executions/:exec_id/abort",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              },
+              {
+                "name": "exec_id",
+                "value": "",
+                "type": "path",
+                "description": "Execution ID to abort"
+              }
+            ]
+          },
+          "docs": "Aborts a running workflow execution."
+        },
+        {
+          "info": {
+            "name": "Schedule Workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/workflows/:id/schedule",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a scheduled trigger for a workflow."
+        },
+        {
+          "info": {
+            "name": "Delete Workflow Schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://shuffler.io/api/v1/workflows/:id/schedule/:sched_id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              },
+              {
+                "name": "sched_id",
+                "value": "",
+                "type": "path",
+                "description": "Schedule ID to delete"
+              }
+            ]
+          },
+          "docs": "Removes a scheduled trigger from a workflow."
+        },
+        {
+          "info": {
+            "name": "List Workflow Schedules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/workflows/schedules"
+          },
+          "docs": "Returns all workflow schedules for the organization."
+        },
+        {
+          "info": {
+            "name": "Get Execution Results",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/streams/results",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves results of a specific workflow execution."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Apps",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Apps",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/apps"
+          },
+          "docs": "Returns all apps available to the organization."
+        },
+        {
+          "info": {
+            "name": "Delete App",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://shuffler.io/api/v1/apps/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "App ID"
+              }
+            ]
+          },
+          "docs": "Deletes a custom app by ID."
+        },
+        {
+          "info": {
+            "name": "Upload App",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/apps/upload",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Uploads a custom app as a ZIP file."
+        },
+        {
+          "info": {
+            "name": "Search Apps",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/apps/search",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Searches the global app library."
+        },
+        {
+          "info": {
+            "name": "List App Authentications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/apps/authentication"
+          },
+          "docs": "Returns all app authentication configurations."
+        },
+        {
+          "info": {
+            "name": "Create App Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://shuffler.io/api/v1/apps/authentication",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new authentication configuration for an app."
+        },
+        {
+          "info": {
+            "name": "Delete App Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://shuffler.io/api/v1/apps/authentication/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Authentication ID"
+              }
+            ]
+          },
+          "docs": "Removes an app authentication configuration."
+        },
+        {
+          "info": {
+            "name": "List App Categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/apps/categories"
+          },
+          "docs": "Returns all available app categories."
+        },
+        {
+          "info": {
+            "name": "Run App Category Action",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/apps/categories/run",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Executes an action within an app category using AI-assisted routing."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Triggers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/hooks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a webhook trigger that can start a workflow when called."
+        },
+        {
+          "info": {
+            "name": "Delete Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://shuffler.io/api/v1/hooks/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Webhook ID"
+              }
+            ]
+          },
+          "docs": "Removes a webhook trigger."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create File",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/files/create",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a file record in the Shuffle file store."
+        },
+        {
+          "info": {
+            "name": "List Files",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/files"
+          },
+          "docs": "Returns all files accessible to the organization."
+        },
+        {
+          "info": {
+            "name": "Upload File Content",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/files/:id/upload",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "File ID"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Uploads content to an existing file record."
+        },
+        {
+          "info": {
+            "name": "Get File Content",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/files/:id/content",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "File ID"
+              }
+            ]
+          },
+          "docs": "Downloads the content of a file."
+        },
+        {
+          "info": {
+            "name": "Get File Metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/files/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "File ID"
+              }
+            ]
+          },
+          "docs": "Retrieves metadata for a specific file."
+        },
+        {
+          "info": {
+            "name": "Delete File",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://shuffler.io/api/v1/files/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "File ID"
+              },
+              {
+                "name": "remove_metadata",
+                "value": "",
+                "type": "query",
+                "description": "Whether to also remove file metadata"
+              }
+            ]
+          },
+          "docs": "Deletes a file from the file store."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Datastore",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Set Cache Value",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/orgs/:org_id/set_cache",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "Organization ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Stores a key-value pair in the organization datastore."
+        },
+        {
+          "info": {
+            "name": "Get Cache Value",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/orgs/:org_id/get_cache",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "Organization ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves a value from the organization datastore by key."
+        },
+        {
+          "info": {
+            "name": "List Cache Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/orgs/:org_id/list_cache",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "Organization ID"
+              },
+              {
+                "name": "top",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to return"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor"
+              },
+              {
+                "name": "category",
+                "value": "",
+                "type": "query",
+                "description": "Filter by category"
+              }
+            ]
+          },
+          "docs": "Lists all cache items in the organization datastore."
+        },
+        {
+          "info": {
+            "name": "Delete Cache Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/orgs/:org_id/delete_cache",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "Organization ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Removes a key-value pair from the organization datastore."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/users/getusers"
+          },
+          "docs": "Returns all users in the organization."
+        },
+        {
+          "info": {
+            "name": "Register User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/users/register",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Registers a new user in the organization."
+        },
+        {
+          "info": {
+            "name": "Update User",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://shuffler.io/api/v1/users/updateuser",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates user details including role assignment."
+        },
+        {
+          "info": {
+            "name": "Delete User",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://shuffler.io/api/v1/users/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "User ID"
+              }
+            ]
+          },
+          "docs": "Removes a user from the organization."
+        },
+        {
+          "info": {
+            "name": "Generate API Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/users/generateapikey"
+          },
+          "docs": "Generates a new API key for the authenticated user."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Organizations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Organizations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/orgs"
+          },
+          "docs": "Returns all organizations accessible to the user."
+        },
+        {
+          "info": {
+            "name": "Get Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/orgs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Organization ID"
+              }
+            ]
+          },
+          "docs": "Retrieves details of a specific organization."
+        },
+        {
+          "info": {
+            "name": "Update Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/orgs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Organization ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates organization details."
+        },
+        {
+          "info": {
+            "name": "Get Organization Stats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/orgs/:org_id/stats",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "Organization ID"
+              }
+            ]
+          },
+          "docs": "Returns usage statistics for an organization."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Notifications",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Notifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/notifications",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by status"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by notification type"
+              },
+              {
+                "name": "severity",
+                "value": "",
+                "type": "query",
+                "description": "Filter by severity level"
+              }
+            ]
+          },
+          "docs": "Returns notifications for the organization."
+        },
+        {
+          "info": {
+            "name": "Create Notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/notifications",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new notification in the organization."
+        },
+        {
+          "info": {
+            "name": "Clear Notifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/notifications/clear"
+          },
+          "docs": "Clears all notifications for the organization."
+        },
+        {
+          "info": {
+            "name": "Mark Notification As Read",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/notifications/:id/markasread",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Notification ID"
+              }
+            ]
+          },
+          "docs": "Marks a specific notification as read."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Administration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Environments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/getenvironments"
+          },
+          "docs": "Returns all execution environments (workers) configured for the organization."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
