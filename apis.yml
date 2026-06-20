@@ -7,7 +7,7 @@ description: >-
   scheduled executions, file storage, and organization management via a comprehensive REST API. It follows the Unix
   philosophy of doing one thing well — connecting security tools through REST APIs.
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
   - Security
   - Workflows
