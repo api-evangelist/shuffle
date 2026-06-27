@@ -22,7 +22,7 @@ specificationVersion: '0.19'
 common:
   - type: LinkedIn
     url: https://www.linkedin.com/company/shuffleeditor
-  - type: LLMsTxt
+  - type: LlmsText
     url: https://shuffler.io/llms.txt
 apis:
   - aid: shuffle:shuffle-api
@@ -53,7 +53,7 @@ apis:
         url: https://github.com/Shuffle/Shuffle
       - type: Pricing
         url: https://shuffler.io/pricing
-      - type: SignUp
+      - type: Signup
         url: https://shuffler.io
       - type: Blog
         url: https://medium.com/shuffle-automation
