@@ -20,6 +20,12 @@ created: '2026-05-02'
 modified: '2026-05-19'
 specificationVersion: '0.19'
 common:
+  - type: VulnerabilityDisclosure
+    url: security/shuffle-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/shuffle-domain-security.yml
+  - type: Authentication
+    url: authentication/shuffle-authentication.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/shuffleeditor
   - type: LlmsText

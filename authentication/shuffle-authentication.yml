@@ -1,0 +1,14 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/shuffle-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  description: 'API key obtained from Shuffle profile settings. Include as: Authorization: Bearer
+    <APIKEY>'
+  sources:
+  - openapi/shuffle-openapi.yml
