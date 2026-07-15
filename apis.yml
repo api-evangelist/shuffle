@@ -20,6 +20,8 @@ created: '2026-05-02'
 modified: '2026-05-19'
 specificationVersion: '0.19'
 common:
+  - type: AgenticAccess
+    url: agentic-access/shuffle-agentic-access.yml
   - type: VulnerabilityDisclosure
     url: security/shuffle-vulnerability-disclosure.yml
   - type: DomainSecurity
