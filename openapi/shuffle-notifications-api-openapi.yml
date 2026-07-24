@@ -1,0 +1,161 @@
+openapi: 3.1.0
+info:
+  title: Shuffle Administration Notifications API
+  description: Shuffle is an open source security automation platform (SOAR) built for and by security professionals. The Shuffle REST API provides programmatic access to all platform capabilities including workflow management, app integration, execution control, user management, organization administration, file storage, datastore operations, and webhook triggers. Everything available in the Shuffle frontend is accessible via the API.
+  version: v1
+  contact:
+    name: Shuffle Support
+    url: https://shuffler.io/docs
+    email: frikky@shuffler.io
+  license:
+    name: Apache 2.0
+    url: https://github.com/Shuffle/Shuffle/blob/main/LICENSE
+servers:
+- url: https://shuffler.io/api/v1
+  description: Shuffle Cloud
+- url: https://{domain}/api/v1
+  description: Shuffle On-Premises
+  variables:
+    domain:
+      description: Your Shuffle instance domain
+      default: localhost
+security:
+- BearerAuth: []
+tags:
+- name: Notifications
+paths:
+  /notifications:
+    get:
+      operationId: listNotifications
+      summary: List Notifications
+      description: Returns notifications for the organization.
+      tags:
+      - Notifications
+      parameters:
+      - name: status
+        in: query
+        description: Filter by status
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Filter by notification type
+        schema:
+          type: string
+      - name: severity
+        in: query
+        description: Filter by severity level
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+    post:
+      operationId: createNotification
+      summary: Create Notification
+      description: Creates a new notification in the organization.
+      tags:
+      - Notifications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - title
+              - description
+              properties:
+                title:
+                  type: string
+                  description: Notification title
+                description:
+                  type: string
+                  description: Notification message
+                reference_url:
+                  type: string
+                  description: URL to related resource
+      responses:
+        '200':
+          description: Notification created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /notifications/clear:
+    get:
+      operationId: clearNotifications
+      summary: Clear Notifications
+      description: Clears all notifications for the organization.
+      tags:
+      - Notifications
+      responses:
+        '200':
+          description: Notifications cleared
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /notifications/{id}/markasread:
+    get:
+      operationId: markNotificationAsRead
+      summary: Mark Notification As Read
+      description: Marks a specific notification as read.
+      tags:
+      - Notifications
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Notification ID
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Notification marked as read
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+components:
+  schemas:
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        reference_url:
+          type: string
+        status:
+          type: string
+        read:
+          type: boolean
+        created:
+          type: integer
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the operation was successful
+        reason:
+          type: string
+          description: Optional error message if success is false
+        id:
+          type: string
+          description: Optional ID of created/affected resource
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key obtained from Shuffle profile settings. Include as: Authorization: Bearer <APIKEY>'

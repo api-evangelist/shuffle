@@ -1,0 +1,206 @@
+openapi: 3.1.0
+info:
+  title: Shuffle Administration Datastore API
+  description: Shuffle is an open source security automation platform (SOAR) built for and by security professionals. The Shuffle REST API provides programmatic access to all platform capabilities including workflow management, app integration, execution control, user management, organization administration, file storage, datastore operations, and webhook triggers. Everything available in the Shuffle frontend is accessible via the API.
+  version: v1
+  contact:
+    name: Shuffle Support
+    url: https://shuffler.io/docs
+    email: frikky@shuffler.io
+  license:
+    name: Apache 2.0
+    url: https://github.com/Shuffle/Shuffle/blob/main/LICENSE
+servers:
+- url: https://shuffler.io/api/v1
+  description: Shuffle Cloud
+- url: https://{domain}/api/v1
+  description: Shuffle On-Premises
+  variables:
+    domain:
+      description: Your Shuffle instance domain
+      default: localhost
+security:
+- BearerAuth: []
+tags:
+- name: Datastore
+paths:
+  /orgs/{org_id}/set_cache:
+    post:
+      operationId: setCache
+      summary: Set Cache Value
+      description: Stores a key-value pair in the organization datastore.
+      tags:
+      - Datastore
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        description: Organization ID
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - key
+              - value
+              properties:
+                key:
+                  type: string
+                  description: Cache key
+                value:
+                  type: string
+                  description: Value to store
+                category:
+                  type: string
+                  description: Optional category for grouping keys
+      responses:
+        '200':
+          description: Value stored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /orgs/{org_id}/get_cache:
+    post:
+      operationId: getCache
+      summary: Get Cache Value
+      description: Retrieves a value from the organization datastore by key.
+      tags:
+      - Datastore
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        description: Organization ID
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - key
+              properties:
+                key:
+                  type: string
+                  description: Cache key to retrieve
+                category:
+                  type: string
+                  description: Optional category filter
+      responses:
+        '200':
+          description: Cache value retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CacheItem'
+  /orgs/{org_id}/list_cache:
+    get:
+      operationId: listCache
+      summary: List Cache Items
+      description: Lists all cache items in the organization datastore.
+      tags:
+      - Datastore
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        description: Organization ID
+        schema:
+          type: string
+      - name: top
+        in: query
+        description: Number of items to return
+        schema:
+          type: integer
+      - name: cursor
+        in: query
+        description: Pagination cursor
+        schema:
+          type: string
+      - name: category
+        in: query
+        description: Filter by category
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of cache items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CacheItem'
+  /orgs/{org_id}/delete_cache:
+    post:
+      operationId: deleteCache
+      summary: Delete Cache Item
+      description: Removes a key-value pair from the organization datastore.
+      tags:
+      - Datastore
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        description: Organization ID
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - key
+              properties:
+                key:
+                  type: string
+                  description: Cache key to delete
+                category:
+                  type: string
+                  description: Optional category
+      responses:
+        '200':
+          description: Cache item deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+components:
+  schemas:
+    CacheItem:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        category:
+          type: string
+        edited:
+          type: integer
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the operation was successful
+        reason:
+          type: string
+          description: Optional error message if success is false
+        id:
+          type: string
+          description: Optional ID of created/affected resource
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key obtained from Shuffle profile settings. Include as: Authorization: Bearer <APIKEY>'

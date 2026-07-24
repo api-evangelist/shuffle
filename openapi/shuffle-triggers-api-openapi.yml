@@ -1,0 +1,118 @@
+openapi: 3.1.0
+info:
+  title: Shuffle Administration Triggers API
+  description: Shuffle is an open source security automation platform (SOAR) built for and by security professionals. The Shuffle REST API provides programmatic access to all platform capabilities including workflow management, app integration, execution control, user management, organization administration, file storage, datastore operations, and webhook triggers. Everything available in the Shuffle frontend is accessible via the API.
+  version: v1
+  contact:
+    name: Shuffle Support
+    url: https://shuffler.io/docs
+    email: frikky@shuffler.io
+  license:
+    name: Apache 2.0
+    url: https://github.com/Shuffle/Shuffle/blob/main/LICENSE
+servers:
+- url: https://shuffler.io/api/v1
+  description: Shuffle Cloud
+- url: https://{domain}/api/v1
+  description: Shuffle On-Premises
+  variables:
+    domain:
+      description: Your Shuffle instance domain
+      default: localhost
+security:
+- BearerAuth: []
+tags:
+- name: Triggers
+paths:
+  /hooks:
+    post:
+      operationId: createWebhook
+      summary: Create Webhook
+      description: Creates a webhook trigger that can start a workflow when called.
+      tags:
+      - Triggers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - type
+              - workflow
+              properties:
+                name:
+                  type: string
+                  description: Name of the webhook
+                type:
+                  type: string
+                  description: Type of hook (webhook, scheduler, etc.)
+                workflow:
+                  type: string
+                  description: Workflow ID to trigger
+                start:
+                  type: string
+                  description: Node ID to start execution at
+      responses:
+        '200':
+          description: Webhook created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+  /hooks/{id}:
+    delete:
+      operationId: deleteWebhook
+      summary: Delete Webhook
+      description: Removes a webhook trigger.
+      tags:
+      - Triggers
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Webhook ID
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Webhook deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the operation was successful
+        reason:
+          type: string
+          description: Optional error message if success is false
+        id:
+          type: string
+          description: Optional ID of created/affected resource
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        workflow:
+          type: string
+        hook_id:
+          type: string
+        info:
+          type: object
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key obtained from Shuffle profile settings. Include as: Authorization: Bearer <APIKEY>'

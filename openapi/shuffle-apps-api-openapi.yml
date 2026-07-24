@@ -1,0 +1,299 @@
+openapi: 3.1.0
+info:
+  title: Shuffle Administration Apps API
+  description: Shuffle is an open source security automation platform (SOAR) built for and by security professionals. The Shuffle REST API provides programmatic access to all platform capabilities including workflow management, app integration, execution control, user management, organization administration, file storage, datastore operations, and webhook triggers. Everything available in the Shuffle frontend is accessible via the API.
+  version: v1
+  contact:
+    name: Shuffle Support
+    url: https://shuffler.io/docs
+    email: frikky@shuffler.io
+  license:
+    name: Apache 2.0
+    url: https://github.com/Shuffle/Shuffle/blob/main/LICENSE
+servers:
+- url: https://shuffler.io/api/v1
+  description: Shuffle Cloud
+- url: https://{domain}/api/v1
+  description: Shuffle On-Premises
+  variables:
+    domain:
+      description: Your Shuffle instance domain
+      default: localhost
+security:
+- BearerAuth: []
+tags:
+- name: Apps
+paths:
+  /apps:
+    get:
+      operationId: listApps
+      summary: List Apps
+      description: Returns all apps available to the organization.
+      tags:
+      - Apps
+      responses:
+        '200':
+          description: List of apps
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/App'
+  /apps/{id}:
+    delete:
+      operationId: deleteApp
+      summary: Delete App
+      description: Deletes a custom app by ID.
+      tags:
+      - Apps
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: App ID
+        schema:
+          type: string
+      responses:
+        '200':
+          description: App deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /apps/upload:
+    post:
+      operationId: uploadApp
+      summary: Upload App
+      description: Uploads a custom app as a ZIP file.
+      tags:
+      - Apps
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: ZIP file containing the app
+      responses:
+        '200':
+          description: App uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /apps/search:
+    post:
+      operationId: searchApps
+      summary: Search Apps
+      description: Searches the global app library.
+      tags:
+      - Apps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - search
+              properties:
+                search:
+                  type: string
+                  description: Search query for app names or categories
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/App'
+  /apps/authentication:
+    get:
+      operationId: listAppAuthentications
+      summary: List App Authentications
+      description: Returns all app authentication configurations.
+      tags:
+      - Apps
+      responses:
+        '200':
+          description: List of app authentications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AppAuthentication'
+    put:
+      operationId: createAppAuthentication
+      summary: Create App Authentication
+      description: Creates a new authentication configuration for an app.
+      tags:
+      - Apps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - label
+              - app
+              properties:
+                label:
+                  type: string
+                  description: Display name for this authentication
+                app:
+                  type: object
+                  description: App object this authentication belongs to
+                fields:
+                  type: array
+                  items:
+                    type: object
+                  description: Authentication field values
+      responses:
+        '200':
+          description: Authentication created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /apps/authentication/{id}:
+    delete:
+      operationId: deleteAppAuthentication
+      summary: Delete App Authentication
+      description: Removes an app authentication configuration.
+      tags:
+      - Apps
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Authentication ID
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Authentication deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /apps/categories:
+    get:
+      operationId: listAppCategories
+      summary: List App Categories
+      description: Returns all available app categories.
+      tags:
+      - Apps
+      responses:
+        '200':
+          description: List of app categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /apps/categories/run:
+    post:
+      operationId: runAppCategory
+      summary: Run App Category Action
+      description: Executes an action within an app category using AI-assisted routing.
+      tags:
+      - Apps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - app_name
+              - category
+              - label
+              properties:
+                app_name:
+                  type: string
+                  description: Name of the app to run
+                category:
+                  type: string
+                  description: Category of the action
+                label:
+                  type: string
+                  description: Label for the action
+                fields:
+                  type: array
+                  items:
+                    type: object
+                  description: Input fields for the action
+      responses:
+        '200':
+          description: Action result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+components:
+  schemas:
+    AppAuthentication:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        app:
+          $ref: '#/components/schemas/App'
+        fields:
+          type: array
+          items:
+            type: object
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the operation was successful
+        reason:
+          type: string
+          description: Optional error message if success is false
+        id:
+          type: string
+          description: Optional ID of created/affected resource
+    App:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        version:
+          type: string
+        categories:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+        actions:
+          type: array
+          items:
+            type: object
+        authentication:
+          type: object
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key obtained from Shuffle profile settings. Include as: Authorization: Bearer <APIKEY>'

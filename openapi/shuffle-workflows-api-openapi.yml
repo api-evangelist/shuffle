@@ -1,0 +1,456 @@
+openapi: 3.1.0
+info:
+  title: Shuffle Administration Workflows API
+  description: Shuffle is an open source security automation platform (SOAR) built for and by security professionals. The Shuffle REST API provides programmatic access to all platform capabilities including workflow management, app integration, execution control, user management, organization administration, file storage, datastore operations, and webhook triggers. Everything available in the Shuffle frontend is accessible via the API.
+  version: v1
+  contact:
+    name: Shuffle Support
+    url: https://shuffler.io/docs
+    email: frikky@shuffler.io
+  license:
+    name: Apache 2.0
+    url: https://github.com/Shuffle/Shuffle/blob/main/LICENSE
+servers:
+- url: https://shuffler.io/api/v1
+  description: Shuffle Cloud
+- url: https://{domain}/api/v1
+  description: Shuffle On-Premises
+  variables:
+    domain:
+      description: Your Shuffle instance domain
+      default: localhost
+security:
+- BearerAuth: []
+tags:
+- name: Workflows
+paths:
+  /workflows:
+    get:
+      operationId: listWorkflows
+      summary: List Workflows
+      description: Returns all workflows accessible to the authenticated user.
+      tags:
+      - Workflows
+      parameters:
+      - name: truncate
+        in: query
+        description: Whether to truncate workflow details in the response
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: List of workflows
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Workflow'
+        '401':
+          description: Unauthorized
+    post:
+      operationId: createWorkflow
+      summary: Create Workflow
+      description: Creates a new automation workflow.
+      tags:
+      - Workflows
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: Name of the workflow
+                description:
+                  type: string
+                  description: Description of the workflow
+      responses:
+        '200':
+          description: Workflow created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workflow'
+        '401':
+          description: Unauthorized
+  /workflows/{id}:
+    get:
+      operationId: getWorkflow
+      summary: Get Workflow
+      description: Retrieves a specific workflow by ID.
+      tags:
+      - Workflows
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Workflow ID
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workflow details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workflow'
+    put:
+      operationId: updateWorkflow
+      summary: Update Workflow
+      description: Updates an existing workflow with a full workflow object.
+      tags:
+      - Workflows
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Workflow ID
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Workflow'
+      responses:
+        '200':
+          description: Workflow updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+    delete:
+      operationId: deleteWorkflow
+      summary: Delete Workflow
+      description: Deletes a workflow by ID.
+      tags:
+      - Workflows
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Workflow ID
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workflow deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /workflows/{id}/execute:
+    post:
+      operationId: executeWorkflow
+      summary: Execute Workflow
+      description: Triggers execution of a workflow with an optional execution argument.
+      tags:
+      - Workflows
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Workflow ID
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                execution_argument:
+                  type: string
+                  description: Input data to pass to the workflow execution
+                start:
+                  type: string
+                  description: Node ID to start execution from
+      responses:
+        '200':
+          description: Workflow execution started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionResponse'
+  /workflows/{id}/executions:
+    get:
+      operationId: getWorkflowExecutions
+      summary: Get Workflow Executions
+      description: Returns the execution history for a workflow.
+      tags:
+      - Workflows
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Workflow ID
+        schema:
+          type: string
+      - name: top
+        in: query
+        description: Number of executions to return
+        schema:
+          type: integer
+      - name: cursor
+        in: query
+        description: Pagination cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of executions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Execution'
+  /workflows/{id}/executions/{exec_id}/abort:
+    get:
+      operationId: abortWorkflowExecution
+      summary: Abort Workflow Execution
+      description: Aborts a running workflow execution.
+      tags:
+      - Workflows
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Workflow ID
+        schema:
+          type: string
+      - name: exec_id
+        in: path
+        required: true
+        description: Execution ID to abort
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Execution aborted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /workflows/{id}/schedule:
+    post:
+      operationId: scheduleWorkflow
+      summary: Schedule Workflow
+      description: Creates a scheduled trigger for a workflow.
+      tags:
+      - Workflows
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Workflow ID
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - frequency
+              properties:
+                frequency:
+                  type: string
+                  description: Cron expression for schedule frequency
+                execution_argument:
+                  type: string
+                  description: Input argument for scheduled executions
+      responses:
+        '200':
+          description: Schedule created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /workflows/{id}/schedule/{sched_id}:
+    delete:
+      operationId: deleteWorkflowSchedule
+      summary: Delete Workflow Schedule
+      description: Removes a scheduled trigger from a workflow.
+      tags:
+      - Workflows
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Workflow ID
+        schema:
+          type: string
+      - name: sched_id
+        in: path
+        required: true
+        description: Schedule ID to delete
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Schedule deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /workflows/schedules:
+    get:
+      operationId: listWorkflowSchedules
+      summary: List Workflow Schedules
+      description: Returns all workflow schedules for the organization.
+      tags:
+      - Workflows
+      responses:
+        '200':
+          description: List of schedules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /streams/results:
+    post:
+      operationId: getExecutionResults
+      summary: Get Execution Results
+      description: Retrieves results of a specific workflow execution.
+      tags:
+      - Workflows
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - execution_id
+              - authorization
+              properties:
+                execution_id:
+                  type: string
+                  description: The execution ID to retrieve results for
+                authorization:
+                  type: string
+                  description: Authorization token for the execution
+      responses:
+        '200':
+          description: Execution results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionResults'
+components:
+  schemas:
+    ExecutionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        execution_id:
+          type: string
+          description: ID of the started execution
+        authorization:
+          type: string
+          description: Authorization token for polling execution status
+    ExecutionResults:
+      type: object
+      properties:
+        success:
+          type: boolean
+        execution_id:
+          type: string
+        status:
+          type: string
+        result:
+          type: string
+        results:
+          type: array
+          items:
+            type: object
+    Workflow:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique workflow identifier
+        name:
+          type: string
+          description: Workflow name
+        description:
+          type: string
+          description: Workflow description
+        status:
+          type: string
+          description: Current workflow status (published, draft)
+        org_id:
+          type: string
+          description: Organization this workflow belongs to
+        created:
+          type: integer
+          description: Creation timestamp (Unix milliseconds)
+        edited:
+          type: integer
+          description: Last edit timestamp (Unix milliseconds)
+        actions:
+          type: array
+          items:
+            type: object
+          description: Array of workflow action nodes
+        triggers:
+          type: array
+          items:
+            type: object
+          description: Array of workflow trigger nodes
+        tags:
+          type: array
+          items:
+            type: string
+          description: Workflow classification tags
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the operation was successful
+        reason:
+          type: string
+          description: Optional error message if success is false
+        id:
+          type: string
+          description: Optional ID of created/affected resource
+    Execution:
+      type: object
+      properties:
+        execution_id:
+          type: string
+        workflow_id:
+          type: string
+        status:
+          type: string
+          enum:
+          - EXECUTING
+          - FINISHED
+          - ABORTED
+          - FAILED
+        started_at:
+          type: integer
+        completed_at:
+          type: integer
+        execution_argument:
+          type: string
+        result:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key obtained from Shuffle profile settings. Include as: Authorization: Bearer <APIKEY>'
