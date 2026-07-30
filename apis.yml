@@ -7,7 +7,20 @@ description: >-
   scheduled executions, file storage, and organization management via a comprehensive REST API. It follows the Unix
   philosophy of doing one thing well — connecting security tools through REST APIs.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/shuffle.png
 tags:
   - Security
   - Workflows
@@ -33,61 +46,384 @@ common:
   - type: LlmsText
     url: https://shuffler.io/llms.txt
 apis:
-  - aid: shuffle:shuffle-api
-    name: Shuffle API
-    description: >-
-      The Shuffle REST API provides programmatic access to all platform capabilities including workflow management, app
-      integration, execution control, user and organization management, file storage, datastore operations, and webhook
-      triggers. Authentication uses a Bearer token from the user's profile settings. The API is available for both the
-      cloud service at shuffler.io and self-hosted on-premises deployments.
-    humanURL: https://shuffler.io/docs/API
-    baseURL: https://shuffler.io/api/v1
-    tags:
-      - Security
-      - Workflows
-      - Automation
-      - SOAR
-      - Orchestration
-    properties:
-      - type: Documentation
-        url: https://shuffler.io/docs
-      - type: APIReference
-        url: https://shuffler.io/docs/API
-      - type: GettingStarted
-        url: https://shuffler.io/docs/getting_started
-      - type: GitHubOrganization
-        url: https://github.com/Shuffle
-      - type: OpenSource
-        url: https://github.com/Shuffle/Shuffle
-      - type: Pricing
-        url: https://shuffler.io/pricing
-      - type: Signup
-        url: https://shuffler.io
-      - type: Blog
-        url: https://medium.com/shuffle-automation
-      - url: https://medium.com/feed/shuffle-automation
-        type: BlogRSS
-        description: Discovered RSS/Atom feed for https://medium.com/shuffle-automation
-      - type: Discord
-        url: https://discord.com/invite/B2CBzUm
-      - type: OpenAPI
-        url: openapi/shuffle-openapi.yml
-      - type: JSONSchema
-        url: json-schema/shuffle-workflow-schema.json
-      - type: JSONSchema
-        url: json-schema/shuffle-execution-schema.json
-      - type: JSONStructure
-        url: json-structure/shuffle-workflow-structure.json
-      - type: JSONLD
-        url: json-ld/shuffle-context.jsonld
-      - type: SpectralRules
-        url: rules/shuffle-rules.yml
-      - type: Vocabulary
-        url: vocabulary/shuffle-vocabulary.yml
-    contact:
-      - FN: Shuffle Support
-        url: https://shuffler.io/docs
-        email: frikky@shuffler.io
+- aid: shuffle:shuffle-administration-api
+  name: Shuffle Administration API
+  description: The Administration API from Shuffle — 1 operation(s) for administration.
+  humanURL: https://shuffler.io/docs/API
+  baseURL: https://shuffler.io/api/v1
+  tags:
+  - Administration
+  properties:
+  - type: OpenAPI
+    url: openapi/shuffle-administration-api-openapi.yml
+  - type: Documentation
+    url: https://shuffler.io/docs
+  - type: APIReference
+    url: https://shuffler.io/docs/API
+  - type: GettingStarted
+    url: https://shuffler.io/docs/getting_started
+  - type: GitHubOrganization
+    url: https://github.com/Shuffle
+  - type: OpenSource
+    url: https://github.com/Shuffle/Shuffle
+  - type: Pricing
+    url: https://shuffler.io/pricing
+  - type: Signup
+    url: https://shuffler.io
+  - type: Blog
+    url: https://medium.com/shuffle-automation
+  - type: BlogRSS
+    url: https://medium.com/feed/shuffle-automation
+  - type: Discord
+    url: https://discord.com/invite/B2CBzUm
+  - type: JSONSchema
+    url: json-schema/shuffle-workflow-schema.json
+  - type: JSONSchema
+    url: json-schema/shuffle-execution-schema.json
+  - type: JSONStructure
+    url: json-structure/shuffle-workflow-structure.json
+  - type: JSONLD
+    url: json-ld/shuffle-context.jsonld
+  - type: SpectralRules
+    url: rules/shuffle-rules.yml
+  - type: Vocabulary
+    url: vocabulary/shuffle-vocabulary.yml
+- aid: shuffle:shuffle-apps-api
+  name: Shuffle Apps API
+  description: The Apps API from Shuffle — 8 operation(s) for apps.
+  humanURL: https://shuffler.io/docs/API
+  baseURL: https://shuffler.io/api/v1
+  tags:
+  - Apps
+  properties:
+  - type: OpenAPI
+    url: openapi/shuffle-apps-api-openapi.yml
+  - type: Documentation
+    url: https://shuffler.io/docs
+  - type: APIReference
+    url: https://shuffler.io/docs/API
+  - type: GettingStarted
+    url: https://shuffler.io/docs/getting_started
+  - type: GitHubOrganization
+    url: https://github.com/Shuffle
+  - type: OpenSource
+    url: https://github.com/Shuffle/Shuffle
+  - type: Pricing
+    url: https://shuffler.io/pricing
+  - type: Signup
+    url: https://shuffler.io
+  - type: Blog
+    url: https://medium.com/shuffle-automation
+  - type: BlogRSS
+    url: https://medium.com/feed/shuffle-automation
+  - type: Discord
+    url: https://discord.com/invite/B2CBzUm
+  - type: JSONSchema
+    url: json-schema/shuffle-workflow-schema.json
+  - type: JSONSchema
+    url: json-schema/shuffle-execution-schema.json
+  - type: JSONStructure
+    url: json-structure/shuffle-workflow-structure.json
+  - type: JSONLD
+    url: json-ld/shuffle-context.jsonld
+  - type: SpectralRules
+    url: rules/shuffle-rules.yml
+  - type: Vocabulary
+    url: vocabulary/shuffle-vocabulary.yml
+- aid: shuffle:shuffle-datastore-api
+  name: Shuffle Datastore API
+  description: The Datastore API from Shuffle — 4 operation(s) for datastore.
+  humanURL: https://shuffler.io/docs/API
+  baseURL: https://shuffler.io/api/v1
+  tags:
+  - Datastore
+  properties:
+  - type: OpenAPI
+    url: openapi/shuffle-datastore-api-openapi.yml
+  - type: Documentation
+    url: https://shuffler.io/docs
+  - type: APIReference
+    url: https://shuffler.io/docs/API
+  - type: GettingStarted
+    url: https://shuffler.io/docs/getting_started
+  - type: GitHubOrganization
+    url: https://github.com/Shuffle
+  - type: OpenSource
+    url: https://github.com/Shuffle/Shuffle
+  - type: Pricing
+    url: https://shuffler.io/pricing
+  - type: Signup
+    url: https://shuffler.io
+  - type: Blog
+    url: https://medium.com/shuffle-automation
+  - type: BlogRSS
+    url: https://medium.com/feed/shuffle-automation
+  - type: Discord
+    url: https://discord.com/invite/B2CBzUm
+  - type: JSONSchema
+    url: json-schema/shuffle-workflow-schema.json
+  - type: JSONSchema
+    url: json-schema/shuffle-execution-schema.json
+  - type: JSONStructure
+    url: json-structure/shuffle-workflow-structure.json
+  - type: JSONLD
+    url: json-ld/shuffle-context.jsonld
+  - type: SpectralRules
+    url: rules/shuffle-rules.yml
+  - type: Vocabulary
+    url: vocabulary/shuffle-vocabulary.yml
+- aid: shuffle:shuffle-files-api
+  name: Shuffle Files API
+  description: The Files API from Shuffle — 5 operation(s) for files.
+  humanURL: https://shuffler.io/docs/API
+  baseURL: https://shuffler.io/api/v1
+  tags:
+  - Files
+  properties:
+  - type: OpenAPI
+    url: openapi/shuffle-files-api-openapi.yml
+  - type: Documentation
+    url: https://shuffler.io/docs
+  - type: APIReference
+    url: https://shuffler.io/docs/API
+  - type: GettingStarted
+    url: https://shuffler.io/docs/getting_started
+  - type: GitHubOrganization
+    url: https://github.com/Shuffle
+  - type: OpenSource
+    url: https://github.com/Shuffle/Shuffle
+  - type: Pricing
+    url: https://shuffler.io/pricing
+  - type: Signup
+    url: https://shuffler.io
+  - type: Blog
+    url: https://medium.com/shuffle-automation
+  - type: BlogRSS
+    url: https://medium.com/feed/shuffle-automation
+  - type: Discord
+    url: https://discord.com/invite/B2CBzUm
+  - type: JSONSchema
+    url: json-schema/shuffle-workflow-schema.json
+  - type: JSONSchema
+    url: json-schema/shuffle-execution-schema.json
+  - type: JSONStructure
+    url: json-structure/shuffle-workflow-structure.json
+  - type: JSONLD
+    url: json-ld/shuffle-context.jsonld
+  - type: SpectralRules
+    url: rules/shuffle-rules.yml
+  - type: Vocabulary
+    url: vocabulary/shuffle-vocabulary.yml
+- aid: shuffle:shuffle-notifications-api
+  name: Shuffle Notifications API
+  description: The Notifications API from Shuffle — 3 operation(s) for notifications.
+  humanURL: https://shuffler.io/docs/API
+  baseURL: https://shuffler.io/api/v1
+  tags:
+  - Notifications
+  properties:
+  - type: OpenAPI
+    url: openapi/shuffle-notifications-api-openapi.yml
+  - type: Documentation
+    url: https://shuffler.io/docs
+  - type: APIReference
+    url: https://shuffler.io/docs/API
+  - type: GettingStarted
+    url: https://shuffler.io/docs/getting_started
+  - type: GitHubOrganization
+    url: https://github.com/Shuffle
+  - type: OpenSource
+    url: https://github.com/Shuffle/Shuffle
+  - type: Pricing
+    url: https://shuffler.io/pricing
+  - type: Signup
+    url: https://shuffler.io
+  - type: Blog
+    url: https://medium.com/shuffle-automation
+  - type: BlogRSS
+    url: https://medium.com/feed/shuffle-automation
+  - type: Discord
+    url: https://discord.com/invite/B2CBzUm
+  - type: JSONSchema
+    url: json-schema/shuffle-workflow-schema.json
+  - type: JSONSchema
+    url: json-schema/shuffle-execution-schema.json
+  - type: JSONStructure
+    url: json-structure/shuffle-workflow-structure.json
+  - type: JSONLD
+    url: json-ld/shuffle-context.jsonld
+  - type: SpectralRules
+    url: rules/shuffle-rules.yml
+  - type: Vocabulary
+    url: vocabulary/shuffle-vocabulary.yml
+- aid: shuffle:shuffle-organizations-api
+  name: Shuffle Organizations API
+  description: The Organizations API from Shuffle — 3 operation(s) for organizations.
+  humanURL: https://shuffler.io/docs/API
+  baseURL: https://shuffler.io/api/v1
+  tags:
+  - Organizations
+  properties:
+  - type: OpenAPI
+    url: openapi/shuffle-organizations-api-openapi.yml
+  - type: Documentation
+    url: https://shuffler.io/docs
+  - type: APIReference
+    url: https://shuffler.io/docs/API
+  - type: GettingStarted
+    url: https://shuffler.io/docs/getting_started
+  - type: GitHubOrganization
+    url: https://github.com/Shuffle
+  - type: OpenSource
+    url: https://github.com/Shuffle/Shuffle
+  - type: Pricing
+    url: https://shuffler.io/pricing
+  - type: Signup
+    url: https://shuffler.io
+  - type: Blog
+    url: https://medium.com/shuffle-automation
+  - type: BlogRSS
+    url: https://medium.com/feed/shuffle-automation
+  - type: Discord
+    url: https://discord.com/invite/B2CBzUm
+  - type: JSONSchema
+    url: json-schema/shuffle-workflow-schema.json
+  - type: JSONSchema
+    url: json-schema/shuffle-execution-schema.json
+  - type: JSONStructure
+    url: json-structure/shuffle-workflow-structure.json
+  - type: JSONLD
+    url: json-ld/shuffle-context.jsonld
+  - type: SpectralRules
+    url: rules/shuffle-rules.yml
+  - type: Vocabulary
+    url: vocabulary/shuffle-vocabulary.yml
+- aid: shuffle:shuffle-triggers-api
+  name: Shuffle Triggers API
+  description: The Triggers API from Shuffle — 2 operation(s) for triggers.
+  humanURL: https://shuffler.io/docs/API
+  baseURL: https://shuffler.io/api/v1
+  tags:
+  - Triggers
+  properties:
+  - type: OpenAPI
+    url: openapi/shuffle-triggers-api-openapi.yml
+  - type: Documentation
+    url: https://shuffler.io/docs
+  - type: APIReference
+    url: https://shuffler.io/docs/API
+  - type: GettingStarted
+    url: https://shuffler.io/docs/getting_started
+  - type: GitHubOrganization
+    url: https://github.com/Shuffle
+  - type: OpenSource
+    url: https://github.com/Shuffle/Shuffle
+  - type: Pricing
+    url: https://shuffler.io/pricing
+  - type: Signup
+    url: https://shuffler.io
+  - type: Blog
+    url: https://medium.com/shuffle-automation
+  - type: BlogRSS
+    url: https://medium.com/feed/shuffle-automation
+  - type: Discord
+    url: https://discord.com/invite/B2CBzUm
+  - type: JSONSchema
+    url: json-schema/shuffle-workflow-schema.json
+  - type: JSONSchema
+    url: json-schema/shuffle-execution-schema.json
+  - type: JSONStructure
+    url: json-structure/shuffle-workflow-structure.json
+  - type: JSONLD
+    url: json-ld/shuffle-context.jsonld
+  - type: SpectralRules
+    url: rules/shuffle-rules.yml
+  - type: Vocabulary
+    url: vocabulary/shuffle-vocabulary.yml
+- aid: shuffle:shuffle-users-api
+  name: Shuffle Users API
+  description: The Users API from Shuffle — 5 operation(s) for users.
+  humanURL: https://shuffler.io/docs/API
+  baseURL: https://shuffler.io/api/v1
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/shuffle-users-api-openapi.yml
+  - type: Documentation
+    url: https://shuffler.io/docs
+  - type: APIReference
+    url: https://shuffler.io/docs/API
+  - type: GettingStarted
+    url: https://shuffler.io/docs/getting_started
+  - type: GitHubOrganization
+    url: https://github.com/Shuffle
+  - type: OpenSource
+    url: https://github.com/Shuffle/Shuffle
+  - type: Pricing
+    url: https://shuffler.io/pricing
+  - type: Signup
+    url: https://shuffler.io
+  - type: Blog
+    url: https://medium.com/shuffle-automation
+  - type: BlogRSS
+    url: https://medium.com/feed/shuffle-automation
+  - type: Discord
+    url: https://discord.com/invite/B2CBzUm
+  - type: JSONSchema
+    url: json-schema/shuffle-workflow-schema.json
+  - type: JSONSchema
+    url: json-schema/shuffle-execution-schema.json
+  - type: JSONStructure
+    url: json-structure/shuffle-workflow-structure.json
+  - type: JSONLD
+    url: json-ld/shuffle-context.jsonld
+  - type: SpectralRules
+    url: rules/shuffle-rules.yml
+  - type: Vocabulary
+    url: vocabulary/shuffle-vocabulary.yml
+- aid: shuffle:shuffle-workflows-api
+  name: Shuffle Workflows API
+  description: The Workflows API from Shuffle — 9 operation(s) for workflows.
+  humanURL: https://shuffler.io/docs/API
+  baseURL: https://shuffler.io/api/v1
+  tags:
+  - Workflows
+  properties:
+  - type: OpenAPI
+    url: openapi/shuffle-workflows-api-openapi.yml
+  - type: Documentation
+    url: https://shuffler.io/docs
+  - type: APIReference
+    url: https://shuffler.io/docs/API
+  - type: GettingStarted
+    url: https://shuffler.io/docs/getting_started
+  - type: GitHubOrganization
+    url: https://github.com/Shuffle
+  - type: OpenSource
+    url: https://github.com/Shuffle/Shuffle
+  - type: Pricing
+    url: https://shuffler.io/pricing
+  - type: Signup
+    url: https://shuffler.io
+  - type: Blog
+    url: https://medium.com/shuffle-automation
+  - type: BlogRSS
+    url: https://medium.com/feed/shuffle-automation
+  - type: Discord
+    url: https://discord.com/invite/B2CBzUm
+  - type: JSONSchema
+    url: json-schema/shuffle-workflow-schema.json
+  - type: JSONSchema
+    url: json-schema/shuffle-execution-schema.json
+  - type: JSONStructure
+    url: json-structure/shuffle-workflow-structure.json
+  - type: JSONLD
+    url: json-ld/shuffle-context.jsonld
+  - type: SpectralRules
+    url: rules/shuffle-rules.yml
+  - type: Vocabulary
+    url: vocabulary/shuffle-vocabulary.yml
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
