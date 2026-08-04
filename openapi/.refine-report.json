@@ -1,0 +1,30 @@
+{
+  "provider": "shuffle",
+  "sources": [
+    "shuffle-administration-api-openapi.yml",
+    "shuffle-apps-api-openapi.yml",
+    "shuffle-datastore-api-openapi.yml",
+    "shuffle-files-api-openapi.yml",
+    "shuffle-notifications-api-openapi.yml",
+    "shuffle-organizations-api-openapi.yml",
+    "shuffle-triggers-api-openapi.yml",
+    "shuffle-users-api-openapi.yml",
+    "shuffle-workflows-api-openapi.yml"
+  ],
+  "outputs": [
+    "shuffle-administration-api-openapi.yml",
+    "shuffle-apps-api-openapi.yml",
+    "shuffle-datastore-api-openapi.yml",
+    "shuffle-files-api-openapi.yml",
+    "shuffle-notifications-api-openapi.yml",
+    "shuffle-organizations-api-openapi.yml",
+    "shuffle-triggers-api-openapi.yml",
+    "shuffle-users-api-openapi.yml",
+    "shuffle-workflows-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

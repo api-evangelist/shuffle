@@ -14,8 +14,15 @@
       "title": "",
       "saved": 0,
       "method": "feed"
+    },
+    {
+      "source": "https://medium.com/shuffle-automation",
+      "feed_url": "https://medium.com/feed/shuffle-automation",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
     }
   ],
-  "fetched": "2026-07-11T11:50:51Z",
+  "fetched": "2026-08-01T15:49:00Z",
   "post_count": 8
 }

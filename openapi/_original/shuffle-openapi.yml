@@ -1,0 +1,1498 @@
+openapi: 3.1.0
+info:
+  title: Shuffle API
+  description: >-
+    Shuffle is an open source security automation platform (SOAR) built for
+    and by security professionals. The Shuffle REST API provides programmatic
+    access to all platform capabilities including workflow management, app
+    integration, execution control, user management, organization administration,
+    file storage, datastore operations, and webhook triggers. Everything available
+    in the Shuffle frontend is accessible via the API.
+  version: 'v1'
+  contact:
+    name: Shuffle Support
+    url: https://shuffler.io/docs
+    email: frikky@shuffler.io
+  license:
+    name: Apache 2.0
+    url: https://github.com/Shuffle/Shuffle/blob/main/LICENSE
+servers:
+  - url: https://shuffler.io/api/v1
+    description: Shuffle Cloud
+  - url: https://{domain}/api/v1
+    description: Shuffle On-Premises
+    variables:
+      domain:
+        description: Your Shuffle instance domain
+        default: localhost
+security:
+  - BearerAuth: []
+paths:
+  /workflows:
+    get:
+      operationId: listWorkflows
+      summary: List Workflows
+      description: Returns all workflows accessible to the authenticated user.
+      tags:
+        - Workflows
+      parameters:
+        - name: truncate
+          in: query
+          description: Whether to truncate workflow details in the response
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: List of workflows
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Workflow'
+        '401':
+          description: Unauthorized
+    post:
+      operationId: createWorkflow
+      summary: Create Workflow
+      description: Creates a new automation workflow.
+      tags:
+        - Workflows
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: Name of the workflow
+                description:
+                  type: string
+                  description: Description of the workflow
+      responses:
+        '200':
+          description: Workflow created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workflow'
+        '401':
+          description: Unauthorized
+  /workflows/{id}:
+    get:
+      operationId: getWorkflow
+      summary: Get Workflow
+      description: Retrieves a specific workflow by ID.
+      tags:
+        - Workflows
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Workflow ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Workflow details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workflow'
+    put:
+      operationId: updateWorkflow
+      summary: Update Workflow
+      description: Updates an existing workflow with a full workflow object.
+      tags:
+        - Workflows
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Workflow ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Workflow'
+      responses:
+        '200':
+          description: Workflow updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+    delete:
+      operationId: deleteWorkflow
+      summary: Delete Workflow
+      description: Deletes a workflow by ID.
+      tags:
+        - Workflows
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Workflow ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Workflow deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /workflows/{id}/execute:
+    post:
+      operationId: executeWorkflow
+      summary: Execute Workflow
+      description: Triggers execution of a workflow with an optional execution argument.
+      tags:
+        - Workflows
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Workflow ID
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                execution_argument:
+                  type: string
+                  description: Input data to pass to the workflow execution
+                start:
+                  type: string
+                  description: Node ID to start execution from
+      responses:
+        '200':
+          description: Workflow execution started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionResponse'
+  /workflows/{id}/executions:
+    get:
+      operationId: getWorkflowExecutions
+      summary: Get Workflow Executions
+      description: Returns the execution history for a workflow.
+      tags:
+        - Workflows
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Workflow ID
+          schema:
+            type: string
+        - name: top
+          in: query
+          description: Number of executions to return
+          schema:
+            type: integer
+        - name: cursor
+          in: query
+          description: Pagination cursor
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of executions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Execution'
+  /workflows/{id}/executions/{exec_id}/abort:
+    get:
+      operationId: abortWorkflowExecution
+      summary: Abort Workflow Execution
+      description: Aborts a running workflow execution.
+      tags:
+        - Workflows
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Workflow ID
+          schema:
+            type: string
+        - name: exec_id
+          in: path
+          required: true
+          description: Execution ID to abort
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Execution aborted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /workflows/{id}/schedule:
+    post:
+      operationId: scheduleWorkflow
+      summary: Schedule Workflow
+      description: Creates a scheduled trigger for a workflow.
+      tags:
+        - Workflows
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Workflow ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - frequency
+              properties:
+                frequency:
+                  type: string
+                  description: Cron expression for schedule frequency
+                execution_argument:
+                  type: string
+                  description: Input argument for scheduled executions
+      responses:
+        '200':
+          description: Schedule created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /workflows/{id}/schedule/{sched_id}:
+    delete:
+      operationId: deleteWorkflowSchedule
+      summary: Delete Workflow Schedule
+      description: Removes a scheduled trigger from a workflow.
+      tags:
+        - Workflows
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Workflow ID
+          schema:
+            type: string
+        - name: sched_id
+          in: path
+          required: true
+          description: Schedule ID to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Schedule deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /workflows/schedules:
+    get:
+      operationId: listWorkflowSchedules
+      summary: List Workflow Schedules
+      description: Returns all workflow schedules for the organization.
+      tags:
+        - Workflows
+      responses:
+        '200':
+          description: List of schedules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /streams/results:
+    post:
+      operationId: getExecutionResults
+      summary: Get Execution Results
+      description: Retrieves results of a specific workflow execution.
+      tags:
+        - Workflows
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - execution_id
+                - authorization
+              properties:
+                execution_id:
+                  type: string
+                  description: The execution ID to retrieve results for
+                authorization:
+                  type: string
+                  description: Authorization token for the execution
+      responses:
+        '200':
+          description: Execution results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionResults'
+  /apps:
+    get:
+      operationId: listApps
+      summary: List Apps
+      description: Returns all apps available to the organization.
+      tags:
+        - Apps
+      responses:
+        '200':
+          description: List of apps
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/App'
+  /apps/{id}:
+    delete:
+      operationId: deleteApp
+      summary: Delete App
+      description: Deletes a custom app by ID.
+      tags:
+        - Apps
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: App ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: App deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /apps/upload:
+    post:
+      operationId: uploadApp
+      summary: Upload App
+      description: Uploads a custom app as a ZIP file.
+      tags:
+        - Apps
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: ZIP file containing the app
+      responses:
+        '200':
+          description: App uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /apps/search:
+    post:
+      operationId: searchApps
+      summary: Search Apps
+      description: Searches the global app library.
+      tags:
+        - Apps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - search
+              properties:
+                search:
+                  type: string
+                  description: Search query for app names or categories
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/App'
+  /apps/authentication:
+    get:
+      operationId: listAppAuthentications
+      summary: List App Authentications
+      description: Returns all app authentication configurations.
+      tags:
+        - Apps
+      responses:
+        '200':
+          description: List of app authentications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AppAuthentication'
+    put:
+      operationId: createAppAuthentication
+      summary: Create App Authentication
+      description: Creates a new authentication configuration for an app.
+      tags:
+        - Apps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - label
+                - app
+              properties:
+                label:
+                  type: string
+                  description: Display name for this authentication
+                app:
+                  type: object
+                  description: App object this authentication belongs to
+                fields:
+                  type: array
+                  items:
+                    type: object
+                  description: Authentication field values
+      responses:
+        '200':
+          description: Authentication created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /apps/authentication/{id}:
+    delete:
+      operationId: deleteAppAuthentication
+      summary: Delete App Authentication
+      description: Removes an app authentication configuration.
+      tags:
+        - Apps
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Authentication ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Authentication deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /apps/categories:
+    get:
+      operationId: listAppCategories
+      summary: List App Categories
+      description: Returns all available app categories.
+      tags:
+        - Apps
+      responses:
+        '200':
+          description: List of app categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /apps/categories/run:
+    post:
+      operationId: runAppCategory
+      summary: Run App Category Action
+      description: Executes an action within an app category using AI-assisted routing.
+      tags:
+        - Apps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - app_name
+                - category
+                - label
+              properties:
+                app_name:
+                  type: string
+                  description: Name of the app to run
+                category:
+                  type: string
+                  description: Category of the action
+                label:
+                  type: string
+                  description: Label for the action
+                fields:
+                  type: array
+                  items:
+                    type: object
+                  description: Input fields for the action
+      responses:
+        '200':
+          description: Action result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /hooks:
+    post:
+      operationId: createWebhook
+      summary: Create Webhook
+      description: Creates a webhook trigger that can start a workflow when called.
+      tags:
+        - Triggers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - type
+                - workflow
+              properties:
+                name:
+                  type: string
+                  description: Name of the webhook
+                type:
+                  type: string
+                  description: Type of hook (webhook, scheduler, etc.)
+                workflow:
+                  type: string
+                  description: Workflow ID to trigger
+                start:
+                  type: string
+                  description: Node ID to start execution at
+      responses:
+        '200':
+          description: Webhook created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+  /hooks/{id}:
+    delete:
+      operationId: deleteWebhook
+      summary: Delete Webhook
+      description: Removes a webhook trigger.
+      tags:
+        - Triggers
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Webhook ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Webhook deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /files/create:
+    post:
+      operationId: createFile
+      summary: Create File
+      description: Creates a file record in the Shuffle file store.
+      tags:
+        - Files
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - filename
+                - org_id
+              properties:
+                filename:
+                  type: string
+                  description: Name of the file
+                org_id:
+                  type: string
+                  description: Organization ID
+                workflow_id:
+                  type: string
+                  description: Associated workflow ID
+                namespace:
+                  type: string
+                  description: File namespace for grouping
+      responses:
+        '200':
+          description: File record created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+  /files:
+    get:
+      operationId: listFiles
+      summary: List Files
+      description: Returns all files accessible to the organization.
+      tags:
+        - Files
+      responses:
+        '200':
+          description: List of files
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+  /files/{id}/upload:
+    post:
+      operationId: uploadFile
+      summary: Upload File Content
+      description: Uploads content to an existing file record.
+      tags:
+        - Files
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: File ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: File content uploaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /files/{id}/content:
+    get:
+      operationId: getFileContent
+      summary: Get File Content
+      description: Downloads the content of a file.
+      tags:
+        - Files
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: File ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: File content
+  /files/{id}:
+    post:
+      operationId: getFileMetadata
+      summary: Get File Metadata
+      description: Retrieves metadata for a specific file.
+      tags:
+        - Files
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: File ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: File metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+    delete:
+      operationId: deleteFile
+      summary: Delete File
+      description: Deletes a file from the file store.
+      tags:
+        - Files
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: File ID
+          schema:
+            type: string
+        - name: remove_metadata
+          in: query
+          description: Whether to also remove file metadata
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: File deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /orgs/{org_id}/set_cache:
+    post:
+      operationId: setCache
+      summary: Set Cache Value
+      description: Stores a key-value pair in the organization datastore.
+      tags:
+        - Datastore
+      parameters:
+        - name: org_id
+          in: path
+          required: true
+          description: Organization ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - key
+                - value
+              properties:
+                key:
+                  type: string
+                  description: Cache key
+                value:
+                  type: string
+                  description: Value to store
+                category:
+                  type: string
+                  description: Optional category for grouping keys
+      responses:
+        '200':
+          description: Value stored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /orgs/{org_id}/get_cache:
+    post:
+      operationId: getCache
+      summary: Get Cache Value
+      description: Retrieves a value from the organization datastore by key.
+      tags:
+        - Datastore
+      parameters:
+        - name: org_id
+          in: path
+          required: true
+          description: Organization ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - key
+              properties:
+                key:
+                  type: string
+                  description: Cache key to retrieve
+                category:
+                  type: string
+                  description: Optional category filter
+      responses:
+        '200':
+          description: Cache value retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CacheItem'
+  /orgs/{org_id}/list_cache:
+    get:
+      operationId: listCache
+      summary: List Cache Items
+      description: Lists all cache items in the organization datastore.
+      tags:
+        - Datastore
+      parameters:
+        - name: org_id
+          in: path
+          required: true
+          description: Organization ID
+          schema:
+            type: string
+        - name: top
+          in: query
+          description: Number of items to return
+          schema:
+            type: integer
+        - name: cursor
+          in: query
+          description: Pagination cursor
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: Filter by category
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of cache items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CacheItem'
+  /orgs/{org_id}/delete_cache:
+    post:
+      operationId: deleteCache
+      summary: Delete Cache Item
+      description: Removes a key-value pair from the organization datastore.
+      tags:
+        - Datastore
+      parameters:
+        - name: org_id
+          in: path
+          required: true
+          description: Organization ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - key
+              properties:
+                key:
+                  type: string
+                  description: Cache key to delete
+                category:
+                  type: string
+                  description: Optional category
+      responses:
+        '200':
+          description: Cache item deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /users/getusers:
+    get:
+      operationId: listUsers
+      summary: List Users
+      description: Returns all users in the organization.
+      tags:
+        - Users
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /users/register:
+    post:
+      operationId: registerUser
+      summary: Register User
+      description: Registers a new user in the organization.
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  description: Username for the new user
+                password:
+                  type: string
+                  description: Password for the new user
+      responses:
+        '200':
+          description: User registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /users/updateuser:
+    put:
+      operationId: updateUser
+      summary: Update User
+      description: Updates user details including role assignment.
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+              properties:
+                user_id:
+                  type: string
+                  description: ID of the user to update
+                role:
+                  type: string
+                  description: New role for the user (admin, user)
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /users/{id}:
+    delete:
+      operationId: deleteUser
+      summary: Delete User
+      description: Removes a user from the organization.
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /users/generateapikey:
+    get:
+      operationId: generateApiKey
+      summary: Generate API Key
+      description: Generates a new API key for the authenticated user.
+      tags:
+        - Users
+      responses:
+        '200':
+          description: New API key generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  api_key:
+                    type: string
+  /orgs:
+    get:
+      operationId: listOrganizations
+      summary: List Organizations
+      description: Returns all organizations accessible to the user.
+      tags:
+        - Organizations
+      responses:
+        '200':
+          description: List of organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+  /orgs/{id}:
+    get:
+      operationId: getOrganization
+      summary: Get Organization
+      description: Retrieves details of a specific organization.
+      tags:
+        - Organizations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Organization ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Organization details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+    post:
+      operationId: updateOrganization
+      summary: Update Organization
+      description: Updates organization details.
+      tags:
+        - Organizations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Organization ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Organization name
+                description:
+                  type: string
+                  description: Organization description
+                image:
+                  type: string
+                  description: Organization logo URL
+      responses:
+        '200':
+          description: Organization updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /orgs/{org_id}/stats:
+    get:
+      operationId: getOrganizationStats
+      summary: Get Organization Stats
+      description: Returns usage statistics for an organization.
+      tags:
+        - Organizations
+      parameters:
+        - name: org_id
+          in: path
+          required: true
+          description: Organization ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Organization statistics
+          content:
+            application/json:
+              schema:
+                type: object
+  /notifications:
+    get:
+      operationId: listNotifications
+      summary: List Notifications
+      description: Returns notifications for the organization.
+      tags:
+        - Notifications
+      parameters:
+        - name: status
+          in: query
+          description: Filter by status
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: Filter by notification type
+          schema:
+            type: string
+        - name: severity
+          in: query
+          description: Filter by severity level
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+    post:
+      operationId: createNotification
+      summary: Create Notification
+      description: Creates a new notification in the organization.
+      tags:
+        - Notifications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - description
+              properties:
+                title:
+                  type: string
+                  description: Notification title
+                description:
+                  type: string
+                  description: Notification message
+                reference_url:
+                  type: string
+                  description: URL to related resource
+      responses:
+        '200':
+          description: Notification created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /notifications/clear:
+    get:
+      operationId: clearNotifications
+      summary: Clear Notifications
+      description: Clears all notifications for the organization.
+      tags:
+        - Notifications
+      responses:
+        '200':
+          description: Notifications cleared
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /notifications/{id}/markasread:
+    get:
+      operationId: markNotificationAsRead
+      summary: Mark Notification As Read
+      description: Marks a specific notification as read.
+      tags:
+        - Notifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Notification ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Notification marked as read
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /getenvironments:
+    get:
+      operationId: listEnvironments
+      summary: List Environments
+      description: Returns all execution environments (workers) configured for the organization.
+      tags:
+        - Administration
+      responses:
+        '200':
+          description: List of environments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Environment'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: "API key obtained from Shuffle profile settings. Include as: Authorization: Bearer <APIKEY>"
+  schemas:
+    Workflow:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique workflow identifier
+        name:
+          type: string
+          description: Workflow name
+        description:
+          type: string
+          description: Workflow description
+        status:
+          type: string
+          description: Current workflow status (published, draft)
+        org_id:
+          type: string
+          description: Organization this workflow belongs to
+        created:
+          type: integer
+          description: Creation timestamp (Unix milliseconds)
+        edited:
+          type: integer
+          description: Last edit timestamp (Unix milliseconds)
+        actions:
+          type: array
+          items:
+            type: object
+          description: Array of workflow action nodes
+        triggers:
+          type: array
+          items:
+            type: object
+          description: Array of workflow trigger nodes
+        tags:
+          type: array
+          items:
+            type: string
+          description: Workflow classification tags
+    ExecutionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        execution_id:
+          type: string
+          description: ID of the started execution
+        authorization:
+          type: string
+          description: Authorization token for polling execution status
+    Execution:
+      type: object
+      properties:
+        execution_id:
+          type: string
+        workflow_id:
+          type: string
+        status:
+          type: string
+          enum: [EXECUTING, FINISHED, ABORTED, FAILED]
+        started_at:
+          type: integer
+        completed_at:
+          type: integer
+        execution_argument:
+          type: string
+        result:
+          type: string
+    ExecutionResults:
+      type: object
+      properties:
+        success:
+          type: boolean
+        execution_id:
+          type: string
+        status:
+          type: string
+        result:
+          type: string
+        results:
+          type: array
+          items:
+            type: object
+    App:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        version:
+          type: string
+        categories:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+        actions:
+          type: array
+          items:
+            type: object
+        authentication:
+          type: object
+    AppAuthentication:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        app:
+          $ref: '#/components/schemas/App'
+        fields:
+          type: array
+          items:
+            type: object
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        workflow:
+          type: string
+        hook_id:
+          type: string
+        info:
+          type: object
+    File:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        org_id:
+          type: string
+        workflow_id:
+          type: string
+        namespace:
+          type: string
+        created:
+          type: integer
+        status:
+          type: string
+        file_size:
+          type: integer
+    CacheItem:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        category:
+          type: string
+        edited:
+          type: integer
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        role:
+          type: string
+          enum: [admin, user]
+        org_id:
+          type: string
+        active:
+          type: boolean
+        created:
+          type: integer
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        org_id:
+          type: string
+        created:
+          type: integer
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        reference_url:
+          type: string
+        status:
+          type: string
+        read:
+          type: boolean
+        created:
+          type: integer
+    Environment:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        running_ip:
+          type: string
+        org_id:
+          type: string
+        auth:
+          type: string
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the operation was successful
+        reason:
+          type: string
+          description: Optional error message if success is false
+        id:
+          type: string
+          description: Optional ID of created/affected resource
