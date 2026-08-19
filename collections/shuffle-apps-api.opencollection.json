@@ -1,0 +1,161 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Shuffle Administration Apps API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Apps",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Apps",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/apps"
+          },
+          "docs": "Returns all apps available to the organization."
+        },
+        {
+          "info": {
+            "name": "Delete App",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://shuffler.io/api/v1/apps/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "App ID"
+              }
+            ]
+          },
+          "docs": "Deletes a custom app by ID."
+        },
+        {
+          "info": {
+            "name": "Upload App",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/apps/upload",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Uploads a custom app as a ZIP file."
+        },
+        {
+          "info": {
+            "name": "Search Apps",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/apps/search",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Searches the global app library."
+        },
+        {
+          "info": {
+            "name": "List App Authentications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/apps/authentication"
+          },
+          "docs": "Returns all app authentication configurations."
+        },
+        {
+          "info": {
+            "name": "Create App Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://shuffler.io/api/v1/apps/authentication",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new authentication configuration for an app."
+        },
+        {
+          "info": {
+            "name": "Delete App Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://shuffler.io/api/v1/apps/authentication/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Authentication ID"
+              }
+            ]
+          },
+          "docs": "Removes an app authentication configuration."
+        },
+        {
+          "info": {
+            "name": "List App Categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/apps/categories"
+          },
+          "docs": "Returns all available app categories."
+        },
+        {
+          "info": {
+            "name": "Run App Category Action",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/apps/categories/run",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Executes an action within an app category using AI-assisted routing."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

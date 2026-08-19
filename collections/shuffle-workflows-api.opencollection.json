@@ -1,0 +1,272 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Shuffle Administration Workflows API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workflows",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Workflows",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/workflows",
+            "params": [
+              {
+                "name": "truncate",
+                "value": "",
+                "type": "query",
+                "description": "Whether to truncate workflow details in the response"
+              }
+            ]
+          },
+          "docs": "Returns all workflows accessible to the authenticated user."
+        },
+        {
+          "info": {
+            "name": "Create Workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/workflows",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new automation workflow."
+        },
+        {
+          "info": {
+            "name": "Get Workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/workflows/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              }
+            ]
+          },
+          "docs": "Retrieves a specific workflow by ID."
+        },
+        {
+          "info": {
+            "name": "Update Workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://shuffler.io/api/v1/workflows/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an existing workflow with a full workflow object."
+        },
+        {
+          "info": {
+            "name": "Delete Workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://shuffler.io/api/v1/workflows/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              }
+            ]
+          },
+          "docs": "Deletes a workflow by ID."
+        },
+        {
+          "info": {
+            "name": "Execute Workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/workflows/:id/execute",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Triggers execution of a workflow with an optional execution argument."
+        },
+        {
+          "info": {
+            "name": "Get Workflow Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/workflows/:id/executions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              },
+              {
+                "name": "top",
+                "value": "",
+                "type": "query",
+                "description": "Number of executions to return"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor"
+              }
+            ]
+          },
+          "docs": "Returns the execution history for a workflow."
+        },
+        {
+          "info": {
+            "name": "Abort Workflow Execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/workflows/:id/executions/:exec_id/abort",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              },
+              {
+                "name": "exec_id",
+                "value": "",
+                "type": "path",
+                "description": "Execution ID to abort"
+              }
+            ]
+          },
+          "docs": "Aborts a running workflow execution."
+        },
+        {
+          "info": {
+            "name": "Schedule Workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/workflows/:id/schedule",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a scheduled trigger for a workflow."
+        },
+        {
+          "info": {
+            "name": "Delete Workflow Schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://shuffler.io/api/v1/workflows/:id/schedule/:sched_id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow ID"
+              },
+              {
+                "name": "sched_id",
+                "value": "",
+                "type": "path",
+                "description": "Schedule ID to delete"
+              }
+            ]
+          },
+          "docs": "Removes a scheduled trigger from a workflow."
+        },
+        {
+          "info": {
+            "name": "List Workflow Schedules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/workflows/schedules"
+          },
+          "docs": "Returns all workflow schedules for the organization."
+        },
+        {
+          "info": {
+            "name": "Get Execution Results",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/streams/results",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves results of a specific workflow execution."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

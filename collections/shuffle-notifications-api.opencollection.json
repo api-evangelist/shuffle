@@ -1,0 +1,100 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Shuffle Administration Notifications API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Notifications",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Notifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/notifications",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by status"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by notification type"
+              },
+              {
+                "name": "severity",
+                "value": "",
+                "type": "query",
+                "description": "Filter by severity level"
+              }
+            ]
+          },
+          "docs": "Returns notifications for the organization."
+        },
+        {
+          "info": {
+            "name": "Create Notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://shuffler.io/api/v1/notifications",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new notification in the organization."
+        },
+        {
+          "info": {
+            "name": "Clear Notifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/notifications/clear"
+          },
+          "docs": "Clears all notifications for the organization."
+        },
+        {
+          "info": {
+            "name": "Mark Notification As Read",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://shuffler.io/api/v1/notifications/:id/markasread",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Notification ID"
+              }
+            ]
+          },
+          "docs": "Marks a specific notification as read."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
