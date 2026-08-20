@@ -27,6 +27,13 @@ tags:
   - Automation
   - SOAR
   - Orchestration
+  - Open-Source
+tags_raw:
+  - Security
+  - Workflows
+  - Automation
+  - SOAR
+  - Orchestration
   - Open Source
 url: https://raw.githubusercontent.com/api-evangelist/shuffle/refs/heads/main/apis.yml
 created: '2026-05-02'
@@ -94,6 +101,8 @@ apis:
   humanURL: https://shuffler.io/docs/API
   baseURL: https://shuffler.io/api/v1
   tags:
+  - Application
+  tags_raw:
   - Apps
   properties:
   - type: OpenAPI
@@ -178,6 +187,8 @@ apis:
   humanURL: https://shuffler.io/docs/API
   baseURL: https://shuffler.io/api/v1
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -220,6 +231,8 @@ apis:
   humanURL: https://shuffler.io/docs/API
   baseURL: https://shuffler.io/api/v1
   tags:
+  - Notification
+  tags_raw:
   - Notifications
   properties:
   - type: OpenAPI
@@ -262,6 +275,8 @@ apis:
   humanURL: https://shuffler.io/docs/API
   baseURL: https://shuffler.io/api/v1
   tags:
+  - Organization
+  tags_raw:
   - Organizations
   properties:
   - type: OpenAPI
@@ -346,6 +361,8 @@ apis:
   humanURL: https://shuffler.io/docs/API
   baseURL: https://shuffler.io/api/v1
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
