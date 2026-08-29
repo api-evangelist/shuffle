@@ -7,6 +7,18 @@ description: >-
   scheduled executions, file storage, and organization management via a comprehensive REST API. It follows the Unix
   philosophy of doing one thing well — connecting security tools through REST APIs.
 type: Index
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
