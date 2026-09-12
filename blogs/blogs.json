@@ -9,25 +9,18 @@
       "method": "none"
     },
     {
+      "source": "https://medium.com/shuffle-automation",
+      "error": "HTTPError"
+    },
+    {
       "source": "https://medium.com/feed/shuffle-automation",
       "feed_url": "https://medium.com/feed/shuffle-automation",
       "title": "",
       "saved": 0,
-      "method": "feed",
-      "nature": "undetermined",
-      "nature_basis": null
-    },
-    {
-      "source": "https://medium.com/shuffle-automation",
-      "feed_url": "https://medium.com/feed/shuffle-automation",
-      "title": "",
-      "saved": 0,
-      "method": "discovered",
-      "nature": "undetermined",
-      "nature_basis": null
+      "method": "feed"
     }
   ],
-  "fetched": "2026-08-30T22:33:40Z",
+  "fetched": "2026-09-06T19:17:18Z",
   "post_count": 8,
   "feed_nature": "undetermined",
   "feed_nature_basis": null,
