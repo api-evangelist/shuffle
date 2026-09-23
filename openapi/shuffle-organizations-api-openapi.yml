@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Shuffle Administration Organizations API
+  title: Shuffle Organizations API
   description: Shuffle is an open source security automation platform (SOAR) built for and by security professionals. The Shuffle REST API provides programmatic access to all platform capabilities including workflow management, app integration, execution control, user management, organization administration, file storage, datastore operations, and webhook triggers. Everything available in the Shuffle frontend is accessible via the API.
   version: v1
   contact:
@@ -120,6 +120,24 @@ paths:
                 type: object
 components:
   schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        role:
+          type: string
+          enum:
+          - admin
+          - user
+        org_id:
+          type: string
+        active:
+          type: boolean
+        created:
+          type: integer
     Organization:
       type: object
       properties:
@@ -137,24 +155,6 @@ components:
             $ref: '#/components/schemas/User'
         org_id:
           type: string
-        created:
-          type: integer
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-        username:
-          type: string
-        role:
-          type: string
-          enum:
-          - admin
-          - user
-        org_id:
-          type: string
-        active:
-          type: boolean
         created:
           type: integer
     ApiResponse:

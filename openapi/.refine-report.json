@@ -1,15 +1,7 @@
 {
   "provider": "shuffle",
   "sources": [
-    "shuffle-administration-api-openapi.yml",
-    "shuffle-apps-api-openapi.yml",
-    "shuffle-datastore-api-openapi.yml",
-    "shuffle-files-api-openapi.yml",
-    "shuffle-notifications-api-openapi.yml",
-    "shuffle-organizations-api-openapi.yml",
-    "shuffle-triggers-api-openapi.yml",
-    "shuffle-users-api-openapi.yml",
-    "shuffle-workflows-api-openapi.yml"
+    "_original/shuffle-openapi.yml"
   ],
   "outputs": [
     "shuffle-administration-api-openapi.yml",
@@ -25,6 +17,29 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "shuffle-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "shuffle-openapi.yml: declared missing tag: Administration",
+    "shuffle-openapi.yml: declared missing tag: Apps",
+    "shuffle-openapi.yml: declared missing tag: Datastore",
+    "shuffle-openapi.yml: declared missing tag: Files",
+    "shuffle-openapi.yml: declared missing tag: Notifications",
+    "shuffle-openapi.yml: declared missing tag: Organizations",
+    "shuffle-openapi.yml: declared missing tag: Triggers",
+    "shuffle-openapi.yml: declared missing tag: Users",
+    "shuffle-openapi.yml: declared missing tag: Workflows",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "shuffle-administration-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "shuffle-apps-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "shuffle-datastore-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "shuffle-files-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "shuffle-notifications-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "shuffle-organizations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "shuffle-triggers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "shuffle-users-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "shuffle-workflows-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
