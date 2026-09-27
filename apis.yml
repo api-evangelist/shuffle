@@ -40,7 +40,7 @@ tags:
 - Automation
 - SOAR
 - Orchestration
-- Open-Source
+- Open Source
 tags_raw:
 - Security
 - Workflows
@@ -48,6 +48,7 @@ tags_raw:
 - SOAR
 - Orchestration
 - Open Source
+- Open-Source
 url: https://raw.githubusercontent.com/api-evangelist/shuffle/refs/heads/main/apis.yml
 created: '2026-05-02'
 modified: '2026-09-16'

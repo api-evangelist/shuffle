@@ -361,33 +361,28 @@ components:
         authorization:
           type: string
           description: Authorization token for polling execution status
-    ExecutionResults:
+    Execution:
       type: object
       properties:
-        success:
-          type: boolean
         execution_id:
+          type: string
+        workflow_id:
           type: string
         status:
           type: string
+          enum:
+          - EXECUTING
+          - FINISHED
+          - ABORTED
+          - FAILED
+        started_at:
+          type: integer
+        completed_at:
+          type: integer
+        execution_argument:
+          type: string
         result:
           type: string
-        results:
-          type: array
-          items:
-            type: object
-    ApiResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: Whether the operation was successful
-        reason:
-          type: string
-          description: Optional error message if success is false
-        id:
-          type: string
-          description: Optional ID of created/affected resource
     Workflow:
       type: object
       properties:
@@ -427,28 +422,33 @@ components:
           items:
             type: string
           description: Workflow classification tags
-    Execution:
+    ExecutionResults:
       type: object
       properties:
+        success:
+          type: boolean
         execution_id:
-          type: string
-        workflow_id:
           type: string
         status:
           type: string
-          enum:
-          - EXECUTING
-          - FINISHED
-          - ABORTED
-          - FAILED
-        started_at:
-          type: integer
-        completed_at:
-          type: integer
-        execution_argument:
-          type: string
         result:
           type: string
+        results:
+          type: array
+          items:
+            type: object
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the operation was successful
+        reason:
+          type: string
+          description: Optional error message if success is false
+        id:
+          type: string
+          description: Optional ID of created/affected resource
   securitySchemes:
     BearerAuth:
       type: http

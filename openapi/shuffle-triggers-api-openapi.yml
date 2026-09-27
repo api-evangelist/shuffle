@@ -84,6 +84,18 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
 components:
   schemas:
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the operation was successful
+        reason:
+          type: string
+          description: Optional error message if success is false
+        id:
+          type: string
+          description: Optional ID of created/affected resource
     Webhook:
       type: object
       properties:
@@ -99,18 +111,6 @@ components:
           type: string
         info:
           type: object
-    ApiResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: Whether the operation was successful
-        reason:
-          type: string
-          description: Optional error message if success is false
-        id:
-          type: string
-          description: Optional ID of created/affected resource
   securitySchemes:
     BearerAuth:
       type: http
