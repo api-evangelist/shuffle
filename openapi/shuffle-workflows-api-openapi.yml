@@ -361,6 +361,33 @@ components:
         authorization:
           type: string
           description: Authorization token for polling execution status
+    ExecutionResults:
+      type: object
+      properties:
+        success:
+          type: boolean
+        execution_id:
+          type: string
+        status:
+          type: string
+        result:
+          type: string
+        results:
+          type: array
+          items:
+            type: object
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the operation was successful
+        reason:
+          type: string
+          description: Optional error message if success is false
+        id:
+          type: string
+          description: Optional ID of created/affected resource
     Execution:
       type: object
       properties:
@@ -422,33 +449,6 @@ components:
           items:
             type: string
           description: Workflow classification tags
-    ExecutionResults:
-      type: object
-      properties:
-        success:
-          type: boolean
-        execution_id:
-          type: string
-        status:
-          type: string
-        result:
-          type: string
-        results:
-          type: array
-          items:
-            type: object
-    ApiResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: Whether the operation was successful
-        reason:
-          type: string
-          description: Optional error message if success is false
-        id:
-          type: string
-          description: Optional ID of created/affected resource
   securitySchemes:
     BearerAuth:
       type: http
