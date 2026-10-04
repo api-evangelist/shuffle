@@ -350,44 +350,6 @@ paths:
                 $ref: '#/components/schemas/ExecutionResults'
 components:
   schemas:
-    ExecutionResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        execution_id:
-          type: string
-          description: ID of the started execution
-        authorization:
-          type: string
-          description: Authorization token for polling execution status
-    ExecutionResults:
-      type: object
-      properties:
-        success:
-          type: boolean
-        execution_id:
-          type: string
-        status:
-          type: string
-        result:
-          type: string
-        results:
-          type: array
-          items:
-            type: object
-    ApiResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: Whether the operation was successful
-        reason:
-          type: string
-          description: Optional error message if success is false
-        id:
-          type: string
-          description: Optional ID of created/affected resource
     Execution:
       type: object
       properties:
@@ -410,6 +372,17 @@ components:
           type: string
         result:
           type: string
+    ExecutionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        execution_id:
+          type: string
+          description: ID of the started execution
+        authorization:
+          type: string
+          description: Authorization token for polling execution status
     Workflow:
       type: object
       properties:
@@ -449,6 +422,33 @@ components:
           items:
             type: string
           description: Workflow classification tags
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the operation was successful
+        reason:
+          type: string
+          description: Optional error message if success is false
+        id:
+          type: string
+          description: Optional ID of created/affected resource
+    ExecutionResults:
+      type: object
+      properties:
+        success:
+          type: boolean
+        execution_id:
+          type: string
+        status:
+          type: string
+        result:
+          type: string
+        results:
+          type: array
+          items:
+            type: object
   securitySchemes:
     BearerAuth:
       type: http

@@ -176,6 +176,17 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
 components:
   schemas:
+    CacheItem:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        category:
+          type: string
+        edited:
+          type: integer
     ApiResponse:
       type: object
       properties:
@@ -188,17 +199,6 @@ components:
         id:
           type: string
           description: Optional ID of created/affected resource
-    CacheItem:
-      type: object
-      properties:
-        key:
-          type: string
-        value:
-          type: string
-        category:
-          type: string
-        edited:
-          type: integer
   securitySchemes:
     BearerAuth:
       type: http
