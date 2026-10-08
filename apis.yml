@@ -54,6 +54,12 @@ created: '2026-05-02'
 modified: '2026-09-16'
 specificationVersion: '0.23'
 common:
+- type: Plans
+  url: plans/shuffle-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/shuffle-rate-limits.yml
+- type: FinOps
+  url: finops/shuffle-finops.yml
 - type: Website
   url: https://shuffler.io
 - type: AgenticAccess
