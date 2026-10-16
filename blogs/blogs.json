@@ -2,18 +2,8 @@
   "repo": "shuffle",
   "feeds": [
     {
-      "source": "https://shuffler.io",
-      "feed_url": "https://shuffler.io",
-      "title": "",
-      "saved": 0,
-      "method": "none"
-    },
-    {
       "source": "https://medium.com/shuffle-automation",
-      "feed_url": "https://medium.com/feed/shuffle-automation",
-      "title": "",
-      "saved": 0,
-      "method": "discovered"
+      "error": "HTTPError"
     },
     {
       "source": "https://medium.com/feed/shuffle-automation",
@@ -21,9 +11,16 @@
       "title": "",
       "saved": 0,
       "method": "feed"
+    },
+    {
+      "source": "https://shuffler.io",
+      "feed_url": "https://shuffler.io",
+      "title": "",
+      "saved": 0,
+      "method": "none"
     }
   ],
-  "fetched": "2026-10-03T12:30:02Z",
+  "fetched": "2026-10-10T13:15:00Z",
   "post_count": 8,
   "feed_nature": "undetermined",
   "feed_nature_basis": null,
