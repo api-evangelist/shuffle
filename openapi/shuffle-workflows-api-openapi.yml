@@ -350,39 +350,18 @@ paths:
                 $ref: '#/components/schemas/ExecutionResults'
 components:
   schemas:
-    Execution:
-      type: object
-      properties:
-        execution_id:
-          type: string
-        workflow_id:
-          type: string
-        status:
-          type: string
-          enum:
-          - EXECUTING
-          - FINISHED
-          - ABORTED
-          - FAILED
-        started_at:
-          type: integer
-        completed_at:
-          type: integer
-        execution_argument:
-          type: string
-        result:
-          type: string
-    ExecutionResponse:
+    ApiResponse:
       type: object
       properties:
         success:
           type: boolean
-        execution_id:
+          description: Whether the operation was successful
+        reason:
           type: string
-          description: ID of the started execution
-        authorization:
+          description: Optional error message if success is false
+        id:
           type: string
-          description: Authorization token for polling execution status
+          description: Optional ID of created/affected resource
     Workflow:
       type: object
       properties:
@@ -422,18 +401,6 @@ components:
           items:
             type: string
           description: Workflow classification tags
-    ApiResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: Whether the operation was successful
-        reason:
-          type: string
-          description: Optional error message if success is false
-        id:
-          type: string
-          description: Optional ID of created/affected resource
     ExecutionResults:
       type: object
       properties:
@@ -449,6 +416,39 @@ components:
           type: array
           items:
             type: object
+    Execution:
+      type: object
+      properties:
+        execution_id:
+          type: string
+        workflow_id:
+          type: string
+        status:
+          type: string
+          enum:
+          - EXECUTING
+          - FINISHED
+          - ABORTED
+          - FAILED
+        started_at:
+          type: integer
+        completed_at:
+          type: integer
+        execution_argument:
+          type: string
+        result:
+          type: string
+    ExecutionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        execution_id:
+          type: string
+          description: ID of the started execution
+        authorization:
+          type: string
+          description: Authorization token for polling execution status
   securitySchemes:
     BearerAuth:
       type: http
