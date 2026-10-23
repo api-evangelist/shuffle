@@ -3,7 +3,10 @@
   "feeds": [
     {
       "source": "https://medium.com/shuffle-automation",
-      "error": "HTTPError"
+      "feed_url": "https://medium.com/feed/shuffle-automation",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
     },
     {
       "source": "https://medium.com/feed/shuffle-automation",
@@ -20,7 +23,7 @@
       "method": "none"
     }
   ],
-  "fetched": "2026-10-10T13:15:00Z",
+  "fetched": "2026-10-17T14:53:57Z",
   "post_count": 8,
   "feed_nature": "undetermined",
   "feed_nature_basis": null,
