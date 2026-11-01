@@ -1,4 +1,4 @@
-# Shuffle (shuffle)
+# Shuffle
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,71 +66,171 @@
 
 Shuffle is an open source security automation platform (SOAR) built for and by security professionals. The platform enables security teams to orchestrate workflows across their entire security tool stack using a no-code/low-code interface powered by OpenAPI integrations. Shuffle provides workflow automation, app integration, webhook triggers, scheduled executions, file storage, and organization management via a comprehensive REST API. It follows the Unix philosophy of doing one thing well — connecting security tools through REST APIs.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/shuffle/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/shuffle/refs/heads/main/apis.yml)
+**Areas:** Security · Workflows · Automation · SOAR · Orchestration · Open Source
 
-## Scope
+## Shuffle on APIs.io
 
-- **Type:** Index
+Everything profiled for Shuffle is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/shuffle/](https://apis.io/providers/shuffle/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (9)
 
-- Security
-- Workflows
-- Automation
-- SOAR
-- Orchestration
-- Open Source
+- [Shuffle Administration API](https://apis.io/apis/shuffle/shuffle-administration-api/) — The Administration API from Shuffle — 1 operation(s) for administration.
+- [Shuffle Apps API](https://apis.io/apis/shuffle/shuffle-apps-api/) — The Apps API from Shuffle — 8 operation(s) for apps.
+- [Shuffle Datastore API](https://apis.io/apis/shuffle/shuffle-datastore-api/) — The Datastore API from Shuffle — 4 operation(s) for datastore.
+- [Shuffle Files API](https://apis.io/apis/shuffle/shuffle-files-api/) — The Files API from Shuffle — 5 operation(s) for files.
+- [Shuffle Notifications API](https://apis.io/apis/shuffle/shuffle-notifications-api/) — The Notifications API from Shuffle — 3 operation(s) for notifications.
+- [Shuffle Organizations API](https://apis.io/apis/shuffle/shuffle-organizations-api/) — The Organizations API from Shuffle — 3 operation(s) for organizations.
+- [Shuffle Triggers API](https://apis.io/apis/shuffle/shuffle-triggers-api/) — The Triggers API from Shuffle — 2 operation(s) for triggers.
+- [Shuffle Users API](https://apis.io/apis/shuffle/shuffle-users-api/) — The Users API from Shuffle — 5 operation(s) for users.
+- [Shuffle Workflows API](https://apis.io/apis/shuffle/shuffle-workflows-api/) — The Workflows API from Shuffle — 9 operation(s) for workflows.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-05-02
-- **Modified:** 2026-05-19
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### Agentic access (1)
 
-### Shuffle API
+Which operations an agent can call, which act, and which need a human in the loop.
 
-The Shuffle REST API provides programmatic access to all platform capabilities including workflow management, app integration, execution control, user and organization management, file storage, datastore operations, and webhook triggers. Authentication uses a Bearer token from the user's profile settings. The API is available for both the cloud service at shuffler.io and self-hosted on-premises deployments.
+- [Shuffle Agentic Access](https://apis.io/agentic-access/shuffle/shuffle-agentic-access/)
 
-- **Human URL:** [https://shuffler.io/docs/API](https://shuffler.io/docs/API)
-- **Base URL:** `https://shuffler.io/api/v1`
+#### JSON Schema (2)
 
-#### Tags
+The data models the API reads and writes.
 
-- Security
-- Workflows
-- Automation
-- SOAR
-- Orchestration
+- [Shuffle Workflow Execution](https://apis.io/schemas/shuffle/shuffle-execution/)
+- [Shuffle Workflow](https://apis.io/schemas/shuffle/shuffle-workflow/)
 
-#### Properties
+#### JSON Structure (1)
 
-- [Documentation](https://shuffler.io/docs)
-- [API Reference](https://shuffler.io/docs/API)
-- [Getting Started](https://shuffler.io/docs/getting_started)
-- [GitHub Organization](https://github.com/Shuffle)
-- [Open Source](https://github.com/Shuffle/Shuffle)
-- [Pricing](https://shuffler.io/pricing)
-- [Sign Up](https://shuffler.io)
-- [Blog](https://medium.com/shuffle-automation)
-- [Blog R S S](https://medium.com/feed/shuffle-automation)
-- [Discord](https://discord.com/invite/B2CBzUm)
-- [OpenAPI](openapi/shuffle-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/shuffle.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/shuffle.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [JSON Schema](json-schema/shuffle-workflow-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/shuffle-execution-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Structure](json-structure/shuffle-workflow-structure.json)
-- [JSON-LD](json-ld/shuffle-context.jsonld) — [JSON-LD](https://www.w3.org/TR/json-ld11/)
-- [Spectral Rules](rules/shuffle-rules.yml)
-- [Vocabulary](vocabulary/shuffle-vocabulary.yml)
+Data models expressed in JSON Structure.
 
-## Common Properties
+- [Shuffle Workflow Structure](https://apis.io/json-structure/shuffle/shuffle-workflow-structure/)
 
-- [LinkedIn](https://www.linkedin.com/company/shuffleeditor)
-- [L L Ms Txt](https://shuffler.io/llms.txt)
+#### JSON-LD (1)
 
-## Maintainers
+Linked-data contexts for the provider's vocabulary.
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+- [Shuffle Context](https://apis.io/jsonld/shuffle/shuffle-context/)
+
+#### Vocabulary (1)
+
+The provider's domain terms, defined.
+
+- [Shuffle Vocabulary](https://apis.io/vocabularies/shuffle/shuffle-vocabulary/)
+
+#### Examples (2)
+
+Example requests and responses.
+
+- [Shuffle Create Workflow Example](https://apis.io/examples/shuffle/shuffle-create-workflow-example/)
+- [Shuffle Execute Workflow Example](https://apis.io/examples/shuffle/shuffle-execute-workflow-example/)
+
+#### Collections (10)
+
+Postman and Open Collection request collections.
+
+- [Shuffle API](https://apis.io/collections/shuffle/open-shuffle/)
+- [Shuffle Administration API](https://apis.io/collections/shuffle/open-shuffle-administration-api/)
+- [Shuffle Administration Apps API](https://apis.io/collections/shuffle/open-shuffle-apps-api/)
+- [Shuffle Administration Datastore API](https://apis.io/collections/shuffle/open-shuffle-datastore-api/)
+- [Shuffle Administration Files API](https://apis.io/collections/shuffle/open-shuffle-files-api/)
+- [Shuffle Administration Notifications API](https://apis.io/collections/shuffle/open-shuffle-notifications-api/)
+- [Shuffle Administration Organizations API](https://apis.io/collections/shuffle/open-shuffle-organizations-api/)
+- [Shuffle Administration Triggers API](https://apis.io/collections/shuffle/open-shuffle-triggers-api/)
+- [Shuffle Administration Users API](https://apis.io/collections/shuffle/open-shuffle-users-api/)
+- [Shuffle Administration Workflows API](https://apis.io/collections/shuffle/open-shuffle-workflows-api/)
+
+#### Governance rules (2)
+
+Spectral rulesets for the provider's contracts.
+
+- [Shuffle — jsonschema rules](https://apis.io/rules/shuffle/shuffle-jsonschema-spectral-rules/)
+- [Shuffle API Rules](https://apis.io/rules/shuffle/shuffle-rules/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Shuffle Authentication](https://apis.io/security/shuffle/shuffle-authentication/)
+- [Shuffle Domain Security](https://apis.io/security/shuffle/shuffle-domain-security/)
+- [Shuffle Vulnerability Disclosure](https://apis.io/security/shuffle/shuffle-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Shuffle Plans Pricing](https://apis.io/plans/shuffle/shuffle-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Shuffle Rate Limits](https://apis.io/rate-limits/shuffle/shuffle-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Shuffle Finops](https://apis.io/finops/shuffle/shuffle-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://shuffler.io)
+
+## API Evangelist rating
+
+**Kin Score 43.5** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 63.9 |
+| Contract governance | 27.3 |
+| Operational transparency | 21.1 |
+| Developer ergonomics | 47.6 |
+| Access clarity | 21.1 |
+
+**Agent readiness 19.0** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 22.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/shuffle/](https://apis.io/providers/shuffle/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Shuffle: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/shuffle/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
